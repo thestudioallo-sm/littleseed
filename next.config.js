@@ -1,28 +1,6 @@
 /** @type {import('next').NextConfig} */
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
-  runtimeCaching: [
-    {
-      urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'supabase-cache',
-        expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 },
-      },
-    },
-    {
-      urlPattern: /\/coloring\/.*\.(svg|pdf|webp)$/i,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'coloring-assets',
-        expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 },
-      },
-    },
-  ],
-});
+// next-pwa disabled for now — re-enable after core deploy is stable
+// const withPWA = require('next-pwa')({ dest: 'public', ... });
 
 const nextConfig = {
   reactStrictMode: true,
@@ -64,4 +42,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withPWA(nextConfig);
+module.exports = nextConfig;

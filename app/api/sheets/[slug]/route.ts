@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSheetBySlug } from '@/lib/search';
 import type { LanguageCode } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/sheets/:slug?lang=en
  *

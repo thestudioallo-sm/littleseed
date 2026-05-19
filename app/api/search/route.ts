@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { searchSheets } from '@/lib/search';
 import type { AgeGroup, Difficulty, LanguageCode } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/search?q=Noah&lang=en&age=early&diff=easy&page=1
  *
