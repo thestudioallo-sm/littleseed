@@ -1,0 +1,2076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>LittleSeed — Bible Coloring Sheets (Demo)</title>
+<style>
+/* ── Reset & base ──────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#2563eb;--brand-h:#1d4ed8;--brand-light:#dbeeff;
+  --text:#1a1a1a;--muted:#555;--border:#e2e6ea;--surface:#f8f9fa;
+  --green:#16a34a;--tap:44px;
+}
+html{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,
+  'Noto Sans Arabic','Noto Sans Ethiopic','Noto Sans Mongolian',sans-serif;
+  font-size:16px;line-height:1.5;color:var(--text);background:#fff}
+a{color:inherit;text-decoration:none}
+button,a{min-height:var(--tap)}
+button{cursor:pointer;font:inherit}
+
+/* ── Layout ────────────────────────────────────────────── */
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+.flex{display:flex}.items-center{align-items:center}
+.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}
+.justify-between{justify-content:space-between}
+.justify-center{justify-content:center}
+.flex-1{flex:1}.shrink-0{flex-shrink:0}
+.flex-col{flex-direction:column}
+.flex-wrap{flex-wrap:wrap}
+.w-full{width:100%}
+.text-center{text-align:center}
+.hidden{display:none!important}
+
+/* ── Header ────────────────────────────────────────────── */
+header{position:sticky;top:0;z-index:10;background:#fff;
+  border-bottom:1px solid var(--border);
+  box-shadow:0 1px 3px rgba(0,0,0,.06)}
+header .inner{max-width:900px;margin:0 auto;padding:0 16px;
+  height:56px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.1rem;font-weight:700;color:var(--brand);
+  display:flex;align-items:center;gap:8px}
+nav a{padding:8px 12px;border-radius:6px;font-size:.875rem;color:#555;
+  display:inline-flex;align-items:center;min-height:var(--tap)}
+nav a:hover{background:var(--surface);color:var(--text)}
+
+/* ── Pages ─────────────────────────────────────────────── */
+.page{display:none;min-height:calc(100vh - 56px - 60px)}
+.page.active{display:block}
+
+/* ── Homepage ───────────────────────────────────────────── */
+.hero{padding:48px 16px 32px;text-align:center;max-width:900px;margin:0 auto}
+.hero h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;color:var(--text);
+  margin-bottom:10px;line-height:1.2}
+.hero p{color:var(--muted);font-size:1rem;margin-bottom:28px}
+.search-form{display:flex;gap:8px;max-width:600px;margin:0 auto 20px}
+.search-form input{flex:1;padding:12px 16px;border:2px solid var(--border);
+  border-radius:10px;font-size:1rem;background:#fff;color:var(--text);
+  outline:none;min-height:52px}
+.search-form input:focus{border-color:var(--brand)}
+.btn-primary{padding:12px 20px;background:var(--brand);color:#fff;border:none;
+  border-radius:10px;font-weight:600;font-size:.95rem;min-height:52px;white-space:nowrap}
+.btn-primary:hover{background:var(--brand-h)}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:8px}
+.chip-label{font-size:.875rem;color:var(--muted);align-self:center}
+.chip{padding:6px 14px;border:1px solid var(--border);border-radius:999px;
+  font-size:.875rem;color:#444;background:#fff;cursor:pointer;min-height:36px;
+  display:inline-flex;align-items:center}
+.chip:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-light)}
+.stat-bar{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;
+  border-top:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;
+  padding:14px 0;margin:24px 0;font-size:.875rem;color:var(--muted)}
+
+/* ── Grid ──────────────────────────────────────────────── */
+.section-head{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px}
+.section-head h2{font-size:1.15rem;font-weight:700}
+.section-head a{font-size:.875rem;color:var(--brand)}
+.section-head a:hover{text-decoration:underline}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:480px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
+
+/* ── Card ───────────────────────────────────────────────── */
+.card{border:1px solid var(--border);border-radius:10px;overflow:hidden;
+  background:#fff;cursor:pointer;transition:border-color .12s}
+.card:hover{border-color:#93b4fd}
+.card-thumb{background:var(--surface);aspect-ratio:3/4;position:relative;
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card-thumb img{width:100%;height:100%;object-fit:contain;padding:8px}
+.card-thumb .thumb-placeholder{display:none;align-items:center;
+  justify-content:center;width:100%;height:100%;color:#ccc}
+.badge-free{position:absolute;top:8px;right:8px;background:var(--green);color:#fff;
+  font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:4px}
+.card-body{padding:10px}
+.card-title{font-size:.825rem;font-weight:600;line-height:1.3;margin-bottom:6px;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card-verse{font-size:.72rem;color:var(--muted);line-height:1.4;margin-bottom:8px;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.tags-row{display:flex;flex-wrap:wrap;gap:4px}
+.tag-age{font-size:.68rem;background:var(--brand-light);color:var(--brand);
+  padding:2px 7px;border-radius:4px}
+.tag-diff{font-size:.68rem;background:var(--surface);color:#555;
+  padding:2px 7px;border-radius:4px}
+
+/* ── Search page ────────────────────────────────────────── */
+.search-page{padding:24px 0}
+.filter-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
+.filter-row label{font-size:.875rem;color:var(--muted)}
+.filter-row select{border:1px solid var(--border);border-radius:6px;
+  padding:7px 10px;font-size:.875rem;background:#fff;min-height:40px;outline:none}
+.filter-row select:focus{border-color:var(--brand)}
+.result-count{font-size:.875rem;color:var(--muted);margin-bottom:16px}
+.result-count strong{color:var(--text)}
+.no-results{text-align:center;padding:80px 20px;color:var(--muted)}
+.no-results svg{margin:0 auto 16px;display:block;color:#ccc}
+.no-results p{font-size:1.05rem;font-weight:600;color:#555;margin-bottom:6px}
+
+/* ── Detail page (SCREEN) ───────────────────────────────── */
+.detail-page{padding:24px 0}
+.back-link{display:inline-flex;align-items:center;gap:4px;
+  font-size:.875rem;color:var(--muted);margin-bottom:16px;min-height:40px}
+.back-link:hover{color:var(--text)}
+.detail-grid{display:grid;grid-template-columns:1fr;gap:24px}
+@media(min-width:640px){.detail-grid{grid-template-columns:1fr 280px}}
+.svg-frame{border:1px solid var(--border);border-radius:12px;
+  background:var(--surface);aspect-ratio:3/4;overflow:hidden;
+  display:flex;align-items:center;justify-content:center}
+.svg-frame img{width:100%;height:100%;object-fit:contain;padding:12px}
+.verse-block{margin-top:16px;padding:14px 16px;
+  border-left:4px solid #93b4fd;background:var(--brand-light);
+  border-radius:0 8px 8px 0;font-size:.95rem;color:#1e3a6e;
+  font-style:italic;line-height:1.7}
+/* RTL verse override (Arabic / Pashto) */
+.verse-block[dir="rtl"]{border-left:none;border-right:4px solid #93b4fd;
+  border-radius:8px 0 0 8px;text-align:right}
+.detail-title{font-size:1.5rem;font-weight:800;line-height:1.2;margin-bottom:6px}
+.detail-ref{font-size:.875rem;color:var(--muted);margin-bottom:14px}
+.detail-desc{font-size:.875rem;color:#444;line-height:1.6;margin-bottom:16px}
+.meta-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.meta-chip{font-size:.75rem;padding:4px 12px;border-radius:999px;border:1px solid}
+.mc-age{background:var(--brand-light);color:var(--brand);border-color:#93c5fd}
+.mc-diff{background:var(--surface);color:#555;border-color:var(--border)}
+.mc-free{background:#f0fdf4;color:var(--green);border-color:#86efac}
+.lang-row{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.lang-row label{font-size:.875rem;font-weight:500;color:#444}
+.lang-row select{border:1px solid var(--border);border-radius:8px;
+  padding:8px 12px;font-size:.875rem;background:#fff;min-height:44px;outline:none}
+.lang-row select:focus{border-color:var(--brand)}
+.action-col{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.btn-download{display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px;background:var(--brand);color:#fff;border:none;
+  border-radius:10px;font-weight:600;font-size:.9rem;min-height:52px}
+.btn-download:hover{background:var(--brand-h)}
+.btn-print{display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 14px;border:1px solid var(--border);background:#fff;
+  color:#444;border-radius:10px;font-size:.875rem;font-weight:500;min-height:44px}
+.btn-print:hover{background:var(--surface)}
+.tag-list{margin-top:4px}
+.tag-list p{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--muted);margin-bottom:8px;font-weight:600}
+.tag-pills{display:flex;flex-wrap:wrap;gap:6px}
+.tag-pill{font-size:.75rem;padding:4px 10px;background:var(--surface);
+  color:#555;border-radius:4px;cursor:pointer;min-height:30px;
+  display:inline-flex;align-items:center}
+.tag-pill:hover{background:#e5e7eb}
+
+/* ── About page ─────────────────────────────────────────── */
+.about-page{padding:32px 0;max-width:680px;margin:0 auto}
+.about-page h1{font-size:1.8rem;font-weight:800;margin-bottom:6px}
+.about-sub{color:var(--brand);font-weight:500;margin-bottom:32px}
+.about-page h2{font-size:1.1rem;font-weight:700;margin-bottom:12px}
+.about-section{margin-bottom:32px}
+.step-list{display:flex;flex-direction:column;gap:16px}
+.step{display:flex;gap:12px}
+.step-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;
+  background:var(--brand);color:#fff;font-size:.8rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center}
+.step-body strong{display:block;font-weight:600;margin-bottom:2px}
+.step-body p{font-size:.875rem;color:#555;line-height:1.5}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.feature-grid{grid-template-columns:1fr}}
+.feature-card{display:flex;gap:10px;padding:14px;
+  border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+.feature-icon{font-size:1.3rem;line-height:1.2;flex-shrink:0}
+.feature-card strong{display:block;font-size:.875rem;margin-bottom:2px}
+.feature-card p{font-size:.8rem;color:#555;line-height:1.4}
+.lang-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.lang-pill{display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border:1px solid var(--border);border-radius:999px;
+  font-size:.875rem;background:#fff}
+.cta-row{display:flex;flex-direction:column;gap:10px;
+  border-top:1px solid var(--border);padding-top:24px}
+@media(min-width:400px){.cta-row{flex-direction:row}}
+.btn-secondary{display:flex;align-items:center;justify-content:center;
+  padding:12px 20px;border:1px solid var(--border);border-radius:10px;
+  color:#555;font-weight:600;font-size:.9rem;min-height:48px;background:#fff}
+.btn-secondary:hover{background:var(--surface)}
+.btn-cta{display:flex;align-items:center;justify-content:center;
+  padding:12px 20px;background:var(--brand);color:#fff;border:none;
+  border-radius:10px;font-weight:600;font-size:.9rem;min-height:48px;cursor:pointer}
+.btn-cta:hover{background:var(--brand-h)}
+.mission-banner{margin-top:48px;padding:20px;
+  background:var(--brand-light);border:1px solid #93c5fd;border-radius:12px}
+.mission-banner h3{font-size:1rem;font-weight:700;color:#1e3a6e;margin-bottom:6px}
+.mission-banner p{font-size:.875rem;color:#1e40af;line-height:1.6}
+.mission-banner a{display:inline-block;margin-top:10px;font-size:.875rem;
+  font-weight:500;color:#1e40af;text-decoration:underline}
+
+/* ── Footer ─────────────────────────────────────────────── */
+footer{border-top:1px solid var(--border);padding:20px 0;
+  text-align:center;font-size:.825rem;color:var(--muted)}
+
+/* ══════════════════════════════════════════════════════════
+   CONVERTER STYLES
+══════════════════════════════════════════════════════════ */
+.converter-wrap{max-width:780px;margin:0 auto;padding:28px 16px}
+.converter-wrap h1{font-size:1.6rem;font-weight:800;margin-bottom:6px}
+.converter-sub{color:var(--brand);font-weight:500;font-size:.9rem;margin-bottom:24px}
+
+/* Upload zone */
+.upload-zone{
+  border:2.5px dashed var(--border);border-radius:14px;padding:40px 20px;
+  text-align:center;cursor:pointer;transition:border-color .15s,background .15s;
+  background:#fafafa;margin-bottom:20px;position:relative
+}
+.upload-zone:hover,.upload-zone.dragover{
+  border-color:var(--brand);background:var(--brand-light)
+}
+.upload-zone svg{margin:0 auto 12px;display:block;color:#aaa}
+.upload-zone.dragover svg{color:var(--brand)}
+.upload-zone p{font-size:.9rem;color:var(--muted);margin-bottom:4px}
+.upload-zone small{font-size:.78rem;color:#aaa}
+.upload-zone input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%
+}
+/* File preview pill */
+.file-pill{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:10px 14px;background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;margin-bottom:20px;font-size:.875rem;max-width:100%
+}
+.file-pill .file-icon{font-size:1.4rem;flex-shrink:0}
+.file-pill .file-info{flex:1;min-width:0}
+.file-pill .file-name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-pill .file-meta{font-size:.75rem;color:var(--muted)}
+.file-pill .remove-btn{
+  background:none;border:none;color:#aaa;cursor:pointer;
+  font-size:1.1rem;padding:4px;min-height:unset;line-height:1
+}
+.file-pill .remove-btn:hover{color:#e53}
+
+/* Settings row */
+.settings-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px
+}
+@media(max-width:480px){.settings-row{grid-template-columns:1fr}}
+.settings-row label{font-size:.8rem;font-weight:600;color:var(--muted);
+  display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.settings-row select{
+  width:100%;border:1px solid var(--border);border-radius:8px;
+  padding:9px 12px;font-size:.875rem;background:#fff;min-height:42px;outline:none
+}
+.settings-row select:focus{border-color:var(--brand)}
+
+/* Copyright notice box */
+.copyright-box{
+  background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;
+  padding:14px 16px;margin-bottom:24px;font-size:.825rem;
+  display:flex;gap:10px;align-items:flex-start
+}
+.copyright-box .icon{font-size:1.2rem;flex-shrink:0;margin-top:1px}
+.copyright-box strong{display:block;font-size:.875rem;margin-bottom:3px;color:#92400e}
+.copyright-box p{color:#78350f;line-height:1.5;margin:0}
+.copyright-allowed{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
+.ca-tag{font-size:.72rem;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px}
+.ca-tag.red{background:#fee2e2;color:#991b1b}
+
+/* Start button */
+.btn-convert{
+  width:100%;padding:15px;background:var(--brand);color:#fff;border:none;
+  border-radius:12px;font-size:1rem;font-weight:700;min-height:52px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px
+}
+.btn-convert:hover{background:var(--brand-h)}
+.btn-convert:disabled{background:#94a3b8;cursor:not-allowed}
+
+/* ── Pipeline page ───────────────────────────────────────── */
+.pipeline-wrap{max-width:640px;margin:0 auto;padding:28px 16px}
+.pipeline-file{font-size:.875rem;color:var(--muted);margin-bottom:20px}
+.pipeline-file strong{color:var(--text)}
+.progress-bar-wrap{background:#e5e7eb;border-radius:999px;height:8px;
+  margin-bottom:28px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--brand);border-radius:999px;
+  transition:width .4s ease}
+.pipeline-steps{display:flex;flex-direction:column;gap:0}
+.p-step{
+  display:flex;gap:14px;padding:16px 0;
+  border-bottom:1px solid #f0f0f0;align-items:flex-start
+}
+.p-step:last-child{border-bottom:none}
+.p-step-icon{
+  flex-shrink:0;width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;margin-top:1px
+}
+.p-step.pending .p-step-icon{background:#f0f0f0;color:#aaa}
+.p-step.active  .p-step-icon{background:var(--brand-light);color:var(--brand)}
+.p-step.done    .p-step-icon{background:#d1fae5;color:#065f46}
+.p-step.warn    .p-step-icon{background:#fef3c7;color:#92400e}
+.p-step.error   .p-step-icon{background:#fee2e2;color:#991b1b}
+.p-step-body{flex:1;min-width:0}
+.p-step-title{font-weight:700;font-size:.9rem;margin-bottom:2px}
+.p-step.pending .p-step-title{color:#aaa}
+.p-step-detail{font-size:.8rem;color:var(--muted);line-height:1.5}
+.p-step-result{
+  margin-top:8px;padding:8px 10px;background:var(--surface);
+  border-radius:6px;font-size:.78rem;font-family:monospace;
+  color:#333;line-height:1.6;display:none
+}
+.p-step.done .p-step-result,.p-step.warn .p-step-result{display:block}
+.spinner{
+  display:inline-block;width:16px;height:16px;
+  border:2px solid var(--brand-light);border-top-color:var(--brand);
+  border-radius:50%;animation:spin .6s linear infinite
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Copyright badge */
+.badge{display:inline-block;font-size:.7rem;font-weight:700;
+  padding:2px 8px;border-radius:4px;margin-left:6px}
+.badge.clear{background:#d1fae5;color:#065f46}
+.badge.warn{background:#fef3c7;color:#92400e}
+.badge.block{background:#fee2e2;color:#991b1b}
+
+/* ── Result page ─────────────────────────────────────────── */
+.result-wrap{max-width:860px;margin:0 auto;padding:28px 16px}
+.result-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.result-header h1{font-size:1.4rem;font-weight:800}
+.done-badge{
+  background:#d1fae5;color:#065f46;font-size:.8rem;font-weight:700;
+  padding:4px 12px;border-radius:999px
+}
+/* Before/after preview */
+.preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+@media(max-width:560px){.preview-grid{grid-template-columns:1fr}}
+.preview-box{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.preview-box-label{
+  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  padding:6px 12px;background:var(--surface);border-bottom:1px solid var(--border);
+  color:var(--muted)
+}
+.preview-box canvas,.preview-box img{
+  width:100%;height:auto;display:block;max-height:280px;object-fit:contain;
+  background:#fff;padding:8px
+}
+
+/* Extracted content panel */
+.content-panel{
+  border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;margin-bottom:20px
+}
+.content-panel-head{
+  padding:10px 14px;background:var(--surface);
+  border-bottom:1px solid var(--border);
+  font-size:.8rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.04em;color:var(--muted);
+  display:flex;align-items:center;justify-content:space-between
+}
+.content-panel-body{padding:14px}
+.content-field{margin-bottom:12px}
+.content-field:last-child{margin-bottom:0}
+.content-field label{font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.04em;color:var(--muted);display:block;margin-bottom:4px}
+.content-field input,.content-field textarea{
+  width:100%;border:1px solid var(--border);border-radius:6px;
+  padding:8px 10px;font-size:.875rem;background:#fff;outline:none;
+  font-family:inherit;resize:vertical
+}
+.content-field input:focus,.content-field textarea:focus{border-color:var(--brand)}
+.json-block{
+  background:#1e293b;color:#e2e8f0;font-family:monospace;font-size:.75rem;
+  padding:12px;border-radius:6px;overflow-x:auto;line-height:1.6;
+  white-space:pre;display:none
+}
+.json-toggle{font-size:.75rem;color:var(--brand);cursor:pointer;
+  text-decoration:underline;background:none;border:none;min-height:unset;
+  padding:0;font-family:inherit}
+
+/* Translation panel */
+.translate-row{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;
+  padding:14px;border-top:1px solid var(--border)
+}
+.translate-row label{font-size:.78rem;font-weight:600;color:var(--muted);
+  display:block;margin-bottom:4px}
+.translate-row select{
+  border:1px solid var(--border);border-radius:8px;
+  padding:8px 12px;font-size:.875rem;background:#fff;min-height:40px;outline:none
+}
+.btn-translate{
+  padding:8px 18px;background:var(--brand);color:#fff;border:none;
+  border-radius:8px;font-size:.875rem;font-weight:600;cursor:pointer;min-height:40px
+}
+.btn-translate:hover{background:var(--brand-h)}
+.translate-result{
+  width:100%;padding:10px 12px;background:var(--brand-light);
+  border-radius:6px;font-size:.875rem;color:#1e3a6e;
+  font-style:italic;line-height:1.6;display:none
+}
+
+/* Export row */
+.export-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.btn-export{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 16px;border-radius:8px;font-size:.875rem;font-weight:600;
+  cursor:pointer;min-height:44px;border:none;
+}
+.btn-export.primary{background:var(--brand);color:#fff}
+.btn-export.primary:hover{background:var(--brand-h)}
+.btn-export.secondary{background:var(--surface);color:var(--text);
+  border:1px solid var(--border)}
+.btn-export.secondary:hover{background:#e5e7eb}
+.btn-export.green{background:#16a34a;color:#fff}
+.btn-export.green:hover{background:#15803d}
+
+/* mode selector (B&W / Grayscale) */
+.mode-chips{display:flex;gap:6px}
+.mode-chip{
+  padding:6px 14px;border:1px solid var(--border);border-radius:6px;
+  font-size:.825rem;cursor:pointer;background:#fff;min-height:36px;
+  display:inline-flex;align-items:center
+}
+.mode-chip.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+/* ══════════════════════════════════════════════════════════
+   PRINT STYLES — completely overrides screen layout
+══════════════════════════════════════════════════════════ */
+/* Print-only elements (hidden on screen) */
+.print-only{display:none}
+
+@media print{
+  @page{
+    size: A4 portrait;
+    margin: 12mm 15mm 10mm 15mm;
+  }
+
+  /* Hide everything except the active detail page */
+  body{background:#fff!important}
+  header,footer,nav,.no-print,
+  .back-link,.lang-row,.action-col,.tag-list,
+  .detail-grid > aside,
+  #page-home,#page-search,#page-about{ display:none!important }
+
+  /* Show the detail page fullscreen */
+  .page{ display:none!important }
+  #page-detail{ display:flex!important; flex-direction:column;
+    height:100%; min-height:0; padding:0!important }
+  .detail-page{ padding:0!important; display:flex;
+    flex-direction:column; height:100%; min-height:0 }
+  .wrap{ padding:0!important; max-width:100%!important }
+
+  /* ── PRINT TITLE (shown above SVG) ── */
+  .print-only{ display:block!important }
+  #print-sheet-title{
+    text-align:center;
+    font-size:20pt;
+    font-weight:800;
+    color:#000;
+    padding-bottom:3mm;
+    margin-bottom:0;
+    line-height:1.2;
+    flex:0 0 auto;
+  }
+  #print-sheet-title.rtl{ direction:rtl; text-align:center }
+
+  /* Description block below title (bible ref + teacher note) */
+  #print-sheet-desc{
+    display:block!important;
+    text-align:center;
+    font-size:10pt;
+    color:#333;
+    line-height:1.55;
+    padding:2.5mm 0 4mm;
+    border-bottom:1px solid #ddd;
+    margin-bottom:3mm;
+    flex:0 0 auto;
+  }
+  #print-sheet-desc .desc-ref{
+    font-weight:700;
+    margin-right:4pt;
+  }
+  #print-sheet-desc.rtl{
+    direction:rtl;
+    text-align:center;
+  }
+  #print-sheet-desc.rtl .desc-ref{
+    margin-right:0;
+    margin-left:4pt;
+  }
+
+  /* ── DETAIL GRID: single column, fills page ── */
+  .detail-grid{
+    display:flex!important;
+    flex-direction:column;
+    flex:1 1 auto;
+    min-height:0;
+    gap:0!important;
+  }
+  .detail-grid > div:first-child{
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
+    min-height:0;
+  }
+
+  /* ── SVG FRAME: fills remaining vertical space ── */
+  .svg-frame{
+    flex:1 1 auto;
+    min-height:0;
+    border:none!important;
+    border-radius:0!important;
+    background:#fff!important;
+    aspect-ratio:unset!important;
+    width:100%;
+  }
+  .svg-frame img{
+    width:100%!important;
+    height:100%!important;
+    object-fit:contain!important;
+    padding:0!important;
+  }
+
+  /* ── VERSE BLOCK: 2× screen font size, at bottom ── */
+  .verse-block{
+    flex:0 0 auto;
+    font-size:18pt!important;       /* ~2× screen size */
+    line-height:1.55!important;
+    font-style:italic;
+    color:#1a1a1a!important;
+    background:transparent!important;
+    border-left:3px solid #555!important;
+    border-right:none!important;
+    border-radius:0!important;
+    padding:4mm 8mm!important;
+    margin-top:4mm!important;
+  }
+  .verse-block[dir="rtl"]{
+    border-left:none!important;
+    border-right:3px solid #555!important;
+    text-align:right!important;
+    direction:rtl!important;
+  }
+
+  /* ── PRINT FOOTER ── */
+  #print-footer{
+    display:block!important;
+    text-align:center;
+    font-size:7pt;
+    color:#aaa;
+    margin-top:3mm;
+    padding-top:2mm;
+    border-top:1px solid #eee;
+    flex:0 0 auto;
+  }
+}
+
+/* ── Converted-sheet badge & publish UI ────────────────────────────────── */
+.converted-badge{
+  position:absolute;top:6px;right:6px;background:#2563eb;color:#fff;
+  font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:4px;
+  letter-spacing:.03em;text-transform:uppercase
+}
+.publish-row{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-bottom:12px;padding:14px 16px;
+  background:linear-gradient(135deg,#eff6ff,#f0fdf4);
+  border:1px solid #bfdbfe;border-radius:10px
+}
+.publish-hint{font-size:.78rem;color:#64748b;flex:1}
+.btn-publish{
+  background:#2563eb;color:#fff;border:none;
+  padding:10px 20px;border-radius:8px;font-size:.9rem;font-weight:700;
+  cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:44px;
+  transition:background .15s
+}
+.btn-publish:hover{background:#1d4ed8}
+.btn-publish:disabled{background:#94a3b8;cursor:not-allowed}
+.btn-export-warn{background:#f59e0b!important;color:#fff}
+.btn-export-warn:hover{background:#d97706!important}
+.btn-publish-blocked{background:#94a3b8!important;cursor:not-allowed!important;opacity:.7}
+.btn-publish-blocked:hover{background:#94a3b8!important}
+/* ── Converter supplement (fills gaps between HTML classes & existing CSS) ── */
+.conv-heading{font-size:1.6rem;font-weight:800;margin-bottom:6px}
+.conv-sub{color:var(--muted);font-size:.9rem;margin-bottom:24px;line-height:1.55}
+.settings-block{margin-bottom:20px}
+.settings-label{font-size:.8rem;font-weight:600;color:var(--muted);
+  display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.cv-select{
+  width:100%;border:1px solid var(--border);border-radius:8px;
+  padding:9px 12px;font-size:.875rem;background:#fff;min-height:42px;outline:none;
+  font-family:inherit
+}
+.cv-select:focus{border-color:var(--brand)}
+.cv-range{width:100%;accent-color:var(--brand);cursor:pointer}
+.cv-range-val{font-size:.825rem;font-weight:700;color:var(--brand);
+  min-width:32px;text-align:right}
+.cv-check-row{display:flex;align-items:flex-start;gap:8px;
+  font-size:.825rem;color:#78350f;margin-top:8px;cursor:pointer}
+.cv-check-row input{margin-top:2px;accent-color:var(--brand)}
+.btn-upload{
+  padding:10px 24px;background:var(--brand);color:#fff;border:none;
+  border-radius:8px;font-size:.875rem;font-weight:600;cursor:pointer;
+  min-height:42px;margin-top:12px;display:inline-flex;align-items:center;gap:8px
+}
+.btn-upload:hover{background:var(--brand-h)}
+.upload-icon{font-size:2.4rem;margin-bottom:10px}
+.upload-label{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:4px!important}
+.upload-hint{font-size:.8rem;color:#aaa;margin-bottom:0!important}
+.file-pill-icon{font-size:1.2rem;flex-shrink:0}
+.file-pill-name{font-weight:600;font-size:.875rem;flex:1;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.file-pill-remove{background:none;border:none;color:#aaa;cursor:pointer;
+  font-size:1rem;padding:2px 4px;min-height:unset;line-height:1}
+.file-pill-remove:hover{color:#e53}
+/* Pipeline progress */
+.prog-track{background:#e5e7eb;border-radius:999px;height:8px;
+  margin-bottom:10px;overflow:hidden}
+.prog-bar{height:100%;background:var(--brand);border-radius:999px;
+  transition:width .5s ease}
+.prog-label{font-size:.825rem;color:var(--muted);margin-bottom:24px;text-align:center}
+.p-step-badge{flex-shrink:0;padding-top:2px}
+.badge{display:inline-block;font-size:.7rem;font-weight:700;
+  padding:2px 8px;border-radius:4px}
+.badge.pending{background:#f1f5f9;color:#94a3b8}
+.badge.active{background:var(--brand-light);color:var(--brand)}
+.badge.done{background:#d1fae5;color:#065f46}
+.badge.warn{background:#fef3c7;color:#92400e}
+.badge.error{background:#fee2e2;color:#991b1b}
+/* Copyright banner */
+.cv-banner{padding:10px 14px;border-radius:8px;font-size:.85rem;
+  font-weight:600;margin-bottom:16px}
+.cv-banner-ok{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+.cv-banner-warn{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.cv-banner-block{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+/* Content panel (result page) */
+.content-panel-header{
+  padding:10px 14px;background:var(--surface);
+  border-bottom:1px solid var(--border);
+  font-size:.8rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.04em;color:var(--muted);
+  display:flex;align-items:center;justify-content:space-between
+}
+.field-row{margin-bottom:12px}
+.field-row:last-child{margin-bottom:0}
+.field-label{font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.04em;color:var(--muted);display:block;margin-bottom:4px}
+.field-input{
+  width:100%;border:1px solid var(--border);border-radius:6px;
+  padding:8px 10px;font-size:.875rem;background:#fff;outline:none;
+  font-family:inherit;box-sizing:border-box
+}
+.field-input:focus{border-color:var(--brand)}
+.field-textarea{resize:vertical}
+.field-mono{font-family:monospace;font-size:.78rem;line-height:1.6}
+.btn-json-toggle{font-size:.75rem;color:var(--brand);cursor:pointer;
+  text-decoration:underline;background:none;border:none;min-height:unset;
+  padding:0;font-family:inherit}
+/* Translate row */
+.translate-label{font-size:.8rem;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.04em;align-self:center}
+/* Preview canvases */
+.preview-cell{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.preview-label{font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.05em;padding:6px 12px;background:var(--surface);
+  border-bottom:1px solid var(--border);color:var(--muted)}
+.preview-canvas{
+  width:100%;height:auto;display:block;max-height:280px;object-fit:contain;
+  background:#fff;padding:8px;box-sizing:border-box
+}
+/* Export buttons (colour aliases) */
+.btn-export-svg{background:var(--brand);color:#fff}
+.btn-export-svg:hover{background:var(--brand-h)}
+.btn-export-pdf{background:var(--surface);color:var(--text);
+  border:1px solid var(--border)!important}
+.btn-export-pdf:hover{background:#e5e7eb}
+.btn-export-pack{background:#16a34a;color:#fff}
+.btn-export-pack:hover{background:#15803d}
+/* Content-panel body padding */
+#content-fields,#content-json{padding:14px}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────────────────── -->
+<header>
+  <div class="inner">
+    <a class="logo" href="#" onclick="showPage('home')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22V12"/><path d="M5 3a7 7 0 0 0 7 7 7 7 0 0 0 7-7"/>
+        <path d="M5 3h14"/>
+      </svg>
+      LittleSeed
+    </a>
+    <nav>
+      <a href="#" onclick="showPage('search')">Browse</a>
+      <a href="#" onclick="showPage('converter')" style="color:var(--brand);font-weight:600">Convert</a>
+      <a href="#" onclick="showPage('about')">About</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: HOME
+══════════════════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <h1>Bible Coloring Sheets</h1>
+    <p>Free &amp; printable — for children, Sunday school &amp; missionaries worldwide</p>
+    <form class="search-form" onsubmit="doSearch(event)">
+      <label for="home-q" style="position:absolute;left:-9999px">Search</label>
+      <input id="home-q" type="search" placeholder="Search Bible stories, verses, themes…" autocomplete="off"/>
+      <button type="submit" class="btn-primary">Search</button>
+    </form>
+    <div class="chips">
+      <span class="chip-label">Popular:</span>
+      <span class="chip" onclick="quickSearch('Noah')">Noah</span>
+      <span class="chip" onclick="quickSearch('Easter')">Easter</span>
+      <span class="chip" onclick="quickSearch('Jesus')">Jesus</span>
+      <span class="chip" onclick="quickSearch('David')">David</span>
+      <span class="chip" onclick="quickSearch('Love')">Love</span>
+      <span class="chip" onclick="quickSearch('Jonah')">Jonah</span>
+      <span class="chip" onclick="quickSearch('Forgiveness')">Forgiveness</span>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="stat-bar">
+      <span>✓ 100% Free</span>
+      <span>✓ Printable PDF &amp; SVG</span>
+      <span>✓ 9 Languages</span>
+      <span>✓ Works Offline</span>
+      <span>✓ No sign-up needed</span>
+    </div>
+    <div class="section-head">
+      <h2>Recently Added</h2>
+      <a href="#" onclick="showPage('search')">Browse all →</a>
+    </div>
+    <div class="grid" id="home-grid"></div>
+    <div class="mission-banner">
+      <h3>For Missionaries &amp; Sunday School Teachers</h3>
+      <p>Every sheet is free to download, print, and use without restriction.
+         Translated verse text in 9 languages for local-language ministry.
+         Lightweight SVG files load quickly even on slow 2G connections.</p>
+      <a href="#" onclick="showPage('about')">Learn more →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: SEARCH
+══════════════════════════════════════════════════════════ -->
+<div class="page" id="page-search">
+  <div class="wrap search-page">
+    <form class="search-form" onsubmit="doSearch(event)" style="margin-bottom:20px">
+      <label for="search-q" style="position:absolute;left:-9999px">Search</label>
+      <input id="search-q" type="search" placeholder="Search Bible stories, verses, themes…" autocomplete="off"/>
+      <button type="submit" class="btn-primary">Search</button>
+    </form>
+    <div class="filter-row no-print">
+      <label for="f-age">Age</label>
+      <select id="f-age" onchange="applyFilters()">
+        <option value="">All ages</option>
+        <option value="toddler">Toddler (2–4)</option>
+        <option value="preschool">Preschool (3–5)</option>
+        <option value="early">Early (5–7)</option>
+        <option value="elementary">Elementary (7–10)</option>
+        <option value="tween">Tween (10–13)</option>
+        <option value="teen">Teen (13–18)</option>
+        <option value="adult">Adult</option>
+      </select>
+      <label for="f-diff">Level</label>
+      <select id="f-diff" onchange="applyFilters()">
+        <option value="">All levels</option>
+        <option value="very_easy">Very Easy</option>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="detailed">Detailed</option>
+      </select>
+    </div>
+    <p class="result-count" id="result-count"></p>
+    <div class="grid" id="search-grid"></div>
+    <div class="no-results hidden" id="no-results">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <p>No sheets found</p>
+      <span>Try a different keyword — Noah, Easter, Love, David…</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: DETAIL
+══════════════════════════════════════════════════════════ -->
+<div class="page" id="page-detail">
+  <div class="wrap detail-page">
+    <a class="back-link no-print" href="#" id="back-btn">← Back to search</a>
+
+    <!-- ★ PRINT-ONLY TITLE + DESC (appears above SVG on print) -->
+    <div class="print-only" id="print-sheet-title"></div>
+    <div class="print-only" id="print-sheet-desc"></div>
+
+    <div class="detail-grid">
+      <!-- Left col: SVG + verse -->
+      <div>
+        <div class="svg-frame" id="detail-svg-frame"></div>
+        <blockquote class="verse-block" id="detail-verse"></blockquote>
+        <!-- Print-only footer -->
+        <div class="print-only" id="print-footer">littleseed.app — Free Bible Coloring Sheets</div>
+      </div>
+
+      <!-- Right col: metadata (hidden on print) -->
+      <aside>
+        <h1 class="detail-title" id="detail-title"></h1>
+        <p class="detail-ref" id="detail-ref"></p>
+        <p class="detail-desc" id="detail-desc"></p>
+        <div class="meta-chips" id="detail-meta"></div>
+
+        <div class="lang-row no-print">
+          <label for="lang-sel">Language</label>
+          <select id="lang-sel" onchange="changeLang(this.value)">
+            <option value="en">English</option>
+            <option value="ko">한국어</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="pt">Português</option>
+            <option value="ar">العربية</option>
+            <option value="ps">پښتو</option>
+            <option value="am">አማርኛ</option>
+            <option value="mn">Монгол</option>
+          </select>
+        </div>
+
+        <div class="action-col no-print">
+          <a id="detail-pdf" href="#" class="btn-download" onclick="alertPdf(event)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download PDF
+          </a>
+          <button class="btn-print" onclick="window.print()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9"/>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+              <rect x="6" y="14" width="12" height="8"/>
+            </svg>
+            Print Coloring Sheet
+          </button>
+        </div>
+
+        <div class="tag-list no-print">
+          <p>Tags</p>
+          <div class="tag-pills" id="detail-tags"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: ABOUT
+══════════════════════════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="wrap">
+  <div class="about-page">
+    <h1>About LittleSeed</h1>
+    <p class="about-sub">Free Bible coloring sheets for children &amp; missionaries worldwide</p>
+    <div class="about-section">
+      <h2>Our Mission</h2>
+      <p style="font-size:.9rem;color:#444;line-height:1.7;margin-bottom:10px">
+        LittleSeed exists to put quality Bible teaching materials into the hands of every
+        missionary, Sunday school teacher, and church worker — regardless of location,
+        budget, or internet speed.
+      </p>
+      <p style="font-size:.9rem;color:#444;line-height:1.7">
+        Every coloring sheet is completely free to download, print, and use without
+        restriction. No subscriptions, no watermarks, no sign-up required.
+      </p>
+    </div>
+    <div class="about-section">
+      <h2>How to Use</h2>
+      <div class="step-list">
+        <div class="step"><div class="step-num">1</div><div class="step-body">
+          <strong>Search</strong>
+          <p>Type a Bible story, theme, or keyword — Noah, Easter, forgiveness — and find matching sheets instantly.</p>
+        </div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body">
+          <strong>Choose your language</strong>
+          <p>Select from 9 languages. The verse text changes — no separate image needed.</p>
+        </div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body">
+          <strong>Download &amp; print</strong>
+          <p>Click Download PDF for a print-ready file, or Print to send directly to your printer.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="about-section">
+      <h2>Built for the Field</h2>
+      <div class="feature-grid">
+        <div class="feature-card"><div class="feature-icon">📶</div>
+          <div><strong>Low bandwidth</strong><p>SVG files are tiny. Loads under 2s on slow 3G.</p></div></div>
+        <div class="feature-card"><div class="feature-icon">📱</div>
+          <div><strong>Mobile-friendly</strong><p>Works on any Android or iOS device.</p></div></div>
+        <div class="feature-card"><div class="feature-icon">🖨️</div>
+          <div><strong>Print-optimised</strong><p>Title above image, large verse text, A4 page-fill.</p></div></div>
+        <div class="feature-card"><div class="feature-icon">🌐</div>
+          <div><strong>Works offline</strong><p>Install the app — visited sheets cached.</p></div></div>
+        <div class="feature-card"><div class="feature-icon">♿</div>
+          <div><strong>Accessible</strong><p>High contrast, RTL support, keyboard navigation.</p></div></div>
+        <div class="feature-card"><div class="feature-icon">🆓</div>
+          <div><strong>Always free</strong><p>No account, no payment, no watermarks.</p></div></div>
+      </div>
+    </div>
+    <div class="about-section">
+      <h2>Supported Languages</h2>
+      <div class="lang-pills">
+        <span class="lang-pill">🇺🇸 English</span>
+        <span class="lang-pill">🇰🇷 한국어</span>
+        <span class="lang-pill">🇪🇸 Español</span>
+        <span class="lang-pill">🇫🇷 Français</span>
+        <span class="lang-pill">🇧🇷 Português</span>
+        <span class="lang-pill">🇸🇦 العربية</span>
+        <span class="lang-pill">🇦🇫 پښتو</span>
+        <span class="lang-pill">🇪🇹 አማርኛ</span>
+        <span class="lang-pill">🇲🇳 Монгол</span>
+      </div>
+    </div>
+    <div class="cta-row">
+      <button class="btn-cta" onclick="showPage('home')">Start searching</button>
+      <button class="btn-secondary" onclick="showPage('search')">Browse all sheets</button>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MISSION CONTENT CONVERTER — PAGE 1: UPLOAD
+══════════════════════════════════════════════════════════ -->
+<div class="page no-print" id="page-converter">
+  <div class="converter-wrap">
+    <h1 class="conv-heading">Mission Content Converter</h1>
+    <p class="conv-sub">Upload a Bible lesson, coloring sheet, or illustration to convert it into a print-ready, multilingual coloring page.</p>
+
+    <!-- Upload zone -->
+    <div class="upload-zone" id="upload-zone"
+         ondragover="cvDragOver(event)" ondragleave="cvDragLeave(event)" ondrop="cvDrop(event)">
+      <input type="file" id="file-input" accept=".png,.jpg,.jpeg,.svg,.pdf" style="display:none" onchange="cvFileChosen(this)">
+      <div class="upload-icon">📄</div>
+      <p class="upload-label">Drag &amp; drop your file here</p>
+      <p class="upload-hint">PNG · JPG · SVG · PDF &nbsp;|&nbsp; Max 10 MB</p>
+      <button class="btn-upload" onclick="document.getElementById('file-input').click()">Choose File</button>
+    </div>
+
+    <!-- Chosen file pill -->
+    <div class="file-pill" id="file-pill" style="display:none">
+      <span class="file-pill-icon">📎</span>
+      <span id="file-pill-name"></span>
+      <button class="file-pill-remove" onclick="cvClearFile()" title="Remove">✕</button>
+    </div>
+
+    <!-- Settings -->
+    <div class="settings-block">
+      <div class="settings-row">
+        <label class="settings-label">Print Mode</label>
+        <div class="mode-chips" id="mode-chips">
+          <button class="mode-chip active" data-mode="bw" onclick="cvSetMode(this)">Black &amp; White</button>
+          <button class="mode-chip" data-mode="grayscale" onclick="cvSetMode(this)">Grayscale</button>
+          <button class="mode-chip" data-mode="outline" onclick="cvSetMode(this)">Outline Only</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label" for="cv-lang">Output Language</label>
+        <select id="cv-lang" class="cv-select">
+          <option value="en">English</option>
+          <option value="ko">한국어</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="pt">Português</option>
+          <option value="ar">العربية</option>
+          <option value="ps">پښتو</option>
+          <option value="am">አማርኛ</option>
+          <option value="mn">Монгол</option>
+        </select>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Edge Sensitivity</label>
+        <input type="range" id="cv-threshold" min="60" max="200" value="128" class="cv-range"
+               oninput="document.getElementById('cv-thresh-val').textContent=this.value">
+        <span id="cv-thresh-val" class="cv-range-val">128</span>
+      </div>
+    </div>
+
+    <!-- Copyright notice -->
+    <div class="copyright-box">
+      <strong>⚖️ Copyright Policy</strong>
+      <p>Only upload material you created, or content that is public domain, Creative Commons licensed, or explicitly missionary-shareable. Commercial curriculum scans, watermarked files, or copyrighted workbooks are not permitted for public sharing.</p>
+      <label class="cv-check-row">
+        <input type="checkbox" id="cv-ack"> I confirm this material is free to use and share.
+      </label>
+    </div>
+
+    <button class="btn-convert" id="btn-start-convert" onclick="cvStartConversion()">
+      ▶&nbsp; Start Conversion
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MISSION CONTENT CONVERTER — PAGE 2: PIPELINE
+══════════════════════════════════════════════════════════ -->
+<div class="page no-print" id="page-pipeline">
+  <div class="converter-wrap">
+    <h1 class="conv-heading">Processing…</h1>
+
+    <!-- Progress bar -->
+    <div class="prog-track">
+      <div class="prog-bar" id="prog-bar" style="width:0%"></div>
+    </div>
+    <p class="prog-label" id="prog-label">Preparing…</p>
+
+    <!-- Steps -->
+    <div class="pipeline-wrap" id="pipeline-wrap">
+      <div class="p-step" id="step-1" data-step="1">
+        <div class="p-step-icon">📥</div>
+        <div class="p-step-body">
+          <div class="p-step-title">File Intake</div>
+          <div class="p-step-desc">Detecting file type, dimensions, and page count</div>
+        </div>
+        <div class="p-step-badge"><span class="badge pending">Pending</span></div>
+      </div>
+      <div class="p-step" id="step-2" data-step="2">
+        <div class="p-step-icon">⚖️</div>
+        <div class="p-step-body">
+          <div class="p-step-title">Copyright Safety Check</div>
+          <div class="p-step-desc">Scanning for restricted phrases, watermarks, and publisher keywords</div>
+        </div>
+        <div class="p-step-badge"><span class="badge pending">Pending</span></div>
+      </div>
+      <div class="p-step" id="step-3" data-step="3">
+        <div class="p-step-icon">📋</div>
+        <div class="p-step-body">
+          <div class="p-step-title">Content Extraction</div>
+          <div class="p-step-desc">Extracting title, verses, paragraphs, and coloring regions</div>
+        </div>
+        <div class="p-step-badge"><span class="badge pending">Pending</span></div>
+      </div>
+      <div class="p-step" id="step-4" data-step="4">
+        <div class="p-step-icon">🎨</div>
+        <div class="p-step-body">
+          <div class="p-step-title">Illustration Processing</div>
+          <div class="p-step-desc">Converting to B&amp;W, simplifying paths, removing noise</div>
+        </div>
+        <div class="p-step-badge"><span class="badge pending">Pending</span></div>
+      </div>
+      <div class="p-step" id="step-5" data-step="5">
+        <div class="p-step-icon">🌐</div>
+        <div class="p-step-body">
+          <div class="p-step-title">Translation Layer</div>
+          <div class="p-step-desc">Translating title and verse to target language</div>
+        </div>
+        <div class="p-step-badge"><span class="badge pending">Pending</span></div>
+      </div>
+      <div class="p-step" id="step-6" data-step="6">
+        <div class="p-step-icon">📦</div>
+        <div class="p-step-body">
+          <div class="p-step-title">Export Package</div>
+          <div class="p-step-desc">Generating SVG, PDF, and offline bundle</div>
+        </div>
+        <div class="p-step-badge"><span class="badge pending">Pending</span></div>
+      </div>
+    </div>
+
+    <button class="btn-secondary" id="btn-cancel-pipeline" style="margin-top:1.5rem" onclick="cvCancel()">Cancel</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MISSION CONTENT CONVERTER — PAGE 3: RESULT
+══════════════════════════════════════════════════════════ -->
+<div class="page no-print" id="page-result">
+  <div class="converter-wrap">
+    <h1 class="conv-heading">Conversion Complete</h1>
+
+    <!-- Before / After preview -->
+    <div class="preview-grid">
+      <div class="preview-cell">
+        <div class="preview-label">Original</div>
+        <canvas id="canvas-before" class="preview-canvas"></canvas>
+      </div>
+      <div class="preview-cell">
+        <div class="preview-label">Converted</div>
+        <canvas id="canvas-after" class="preview-canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Copyright status banner -->
+    <div id="cv-copyright-banner" class="cv-banner cv-banner-ok" style="display:none"></div>
+
+    <!-- Extracted content panel -->
+    <div class="content-panel">
+      <div class="content-panel-header">
+        <span>Extracted Content</span>
+        <button class="btn-json-toggle" id="btn-json" onclick="cvToggleJson()">Show JSON</button>
+      </div>
+
+      <div id="content-fields">
+        <div class="field-row">
+          <label class="field-label">Title</label>
+          <input id="f-title" class="field-input" type="text" placeholder="Enter title…">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Bible Verse</label>
+          <input id="f-verse" class="field-input" type="text" placeholder="e.g. John 3:16">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Description</label>
+          <textarea id="f-desc" class="field-input field-textarea" rows="3" placeholder="Short description for children…"></textarea>
+        </div>
+        <div class="field-row">
+          <label class="field-label">Tags (comma-separated)</label>
+          <input id="f-tags" class="field-input" type="text" placeholder="faith, prayer, Jesus…">
+        </div>
+      </div>
+
+      <div id="content-json" style="display:none">
+        <textarea id="f-json" class="field-input field-textarea field-mono" rows="10" spellcheck="false"></textarea>
+      </div>
+    </div>
+
+    <!-- Translation row -->
+    <div class="translate-row">
+      <div class="translate-label">Translate to:</div>
+      <select id="cv-translate-lang" class="cv-select">
+        <option value="">— Select language —</option>
+        <option value="en">English</option>
+        <option value="ko">한국어</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="pt">Português</option>
+        <option value="ar">العربية</option>
+        <option value="ps">پښتو</option>
+        <option value="am">አማርኛ</option>
+        <option value="mn">Монгол</option>
+      </select>
+      <button class="btn-translate" onclick="cvTranslate()">Translate (stub)</button>
+    </div>
+
+    <!-- Publish to gallery -->
+    <div class="publish-row">
+      <button class="btn-export btn-publish" id="btn-publish" onclick="cvPublish()">
+        🌐 Publish to Gallery
+      </button>
+      <span class="publish-hint">Adds this sheet to the home gallery (this session only)</span>
+    </div>
+
+    <!-- Export buttons -->
+    <div class="export-row">
+      <button class="btn-export btn-export-svg" onclick="cvExportSVG()">⬇ Export SVG</button>
+      <button class="btn-export btn-export-pdf" onclick="cvExportPDF()">🖨 Print / PDF</button>
+      <button class="btn-export btn-export-pack" onclick="cvExportPack()">📦 Offline Pack</button>
+    </div>
+
+    <div style="margin-top:1.5rem;display:flex;gap:0.75rem;flex-wrap:wrap">
+      <button class="btn-secondary" onclick="showPage('converter')">← Convert Another</button>
+      <button class="btn-cta" onclick="showPage('home')">Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+<footer class="no-print">
+  LittleSeed &mdash; Free Bible Coloring Sheets &mdash;
+  <a href="#" onclick="showPage('about')">About</a>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════
+     DATA
+══════════════════════════════════════════════════════════ -->
+<script>
+/* ── RTL languages ───────────────────────────────────────── */
+const RTL_LANGS = new Set(['ar','ps']);
+
+/* ══════════════════════════════════════════════════════════
+   SHEET DATA  (6 sheets × 9 languages)
+══════════════════════════════════════════════════════════ */
+const SHEETS = [
+  {
+    slug:'noah-ark-01', bible_story:'Noah and the Ark',
+    bible_ref:'Genesis 6:9-22', age_group:'early', difficulty:'easy',
+    tags:['noah','ark','animals','flood','obedience','faith','rainbow'],
+    svg_url:'coloring/noah/noah-ark-01.svg',
+    translations:{
+      en:{title:'Noah and the Ark',
+        verse:'"Noah was a righteous man, blameless among the people of his time, and he walked faithfully with God." — Genesis 6:9',
+        desc:'Noah trusted God and built the ark just as He commanded. Color the animals going two by two!'},
+      ko:{title:'노아의 방주',
+        verse:'"노아는 의인이요 당대에 완전한 자라 그는 하나님과 동행하였으며" — 창세기 6:9',
+        desc:'노아는 하나님을 믿고 방주를 지었어요. 동물들이 두 마리씩 들어가는 모습을 색칠해 보세요!'},
+      es:{title:'Noé y el Arca',
+        verse:'"Noé era un hombre justo, irreprochable entre la gente de su tiempo, y caminaba fielmente con Dios." — Génesis 6:9',
+        desc:'Noé confió en Dios y construyó el arca. ¡Colorea los animales entrando de dos en dos!'},
+      fr:{title:"Noé et l'Arche",
+        verse:'"Noé était un homme juste, intègre parmi ses contemporains, et il marchait avec Dieu." — Genèse 6:9',
+        desc:"Noé a fait confiance à Dieu et a construit l'arche. Colorie les animaux deux par deux!"},
+      pt:{title:'Noé e a Arca',
+        verse:'"Noé era um homem justo e íntegro entre os seus contemporâneos; Noé andava com Deus." — Gênesis 6:9',
+        desc:'Noé confiou em Deus e construiu a arca. Pinte os animais entrando dois a dois!'},
+      ar:{title:'نوح والفُلك',
+        verse:'"كَانَ نُوحٌ رَجُلًا بَارًّا، كَامِلًا فِي أَجْيَالِهِ، وَسَلَكَ نُوحٌ مَعَ اللهِ." — تكوين 6:9',
+        desc:'آمن نوح بالله وبنى الفُلك كما أمره. لوّن الحيوانات وهي تدخل اثنين اثنين!'},
+      ps:{title:'نوح او کشتۍ',
+        verse:'"نوح یو نیک سړی و، خپل وخت کې بې عیبه؛ هغه د خدای سره روان و." — پیدایش ۶:۹',
+        desc:'نوح خدای ته ایمان درلود او کشتۍ یې جوړه کړه. حیوانات رنګ کړئ چې دوه‌دوه دننه ځي!'},
+      am:{title:'ኖህ እና መርከቡ',
+        verse:'"ኖህ ጻድቅ ሰው ነበር፤ ኖህ ከእግዚአብሔር ጋር ተመላለሰ።" — ዘፍጥረት 6:9',
+        desc:'ኖህ እግዚአብሔርን አምኖ መርከቡን ሠራ። ሁለት ሁለት ሆነው የሚገቡትን እንስሳት ቀቡ!'},
+      mn:{title:'Ноа ба Онгоц',
+        verse:'"Ноа шударга хүн байсан бөгөөд Бурхантай хамт явсан." — Эхлэл 6:9',
+        desc:'Ноа Бурханд итгэж онгоц барив. Хоёр хоёроороо ордог амьтдыг будаарай!'},
+    }
+  },
+  {
+    slug:'david-goliath-01', bible_story:'David and Goliath',
+    bible_ref:'1 Samuel 17:45-50', age_group:'elementary', difficulty:'medium',
+    tags:['david','goliath','courage','faith','victory','giant','sling'],
+    svg_url:'coloring/david/david-goliath-01.svg',
+    translations:{
+      en:{title:'David and Goliath',
+        verse:'"I come against you in the name of the LORD Almighty." — 1 Samuel 17:45',
+        desc:'With just a sling and five smooth stones, David trusted God and defeated the giant Goliath!'},
+      ko:{title:'다윗과 골리앗',
+        verse:'"나는 만군의 여호와의 이름으로 네게 나아가노라" — 사무엘상 17:45',
+        desc:'다윗은 하나님을 믿고 작은 돌멩이로 거인 골리앗을 이겼어요!'},
+      es:{title:'David y Goliat',
+        verse:'"Yo vengo contra ti en el nombre del SEÑOR Todopoderoso." — 1 Samuel 17:45',
+        desc:'Con solo una honda y cinco piedras, David confió en Dios y venció al gigante Goliat.'},
+      fr:{title:'David et Goliath',
+        verse:"\"Je viens à toi au nom de l'Éternel des armées.\" — 1 Samuel 17:45",
+        desc:'Avec juste une fronde et cinq pierres, David a fait confiance à Dieu et a vaincu Goliath!'},
+      pt:{title:'Davi e Golias',
+        verse:'"Eu venho contra ti em nome do SENHOR dos Exércitos." — 1 Samuel 17:45',
+        desc:'Com apenas uma funda e cinco pedras, Davi confiou em Deus e derrotou o gigante Golias!'},
+      ar:{title:'داود وجُليات',
+        verse:'"أَنَا آتِي إِلَيْكَ بِاسْمِ رَبِّ الْجُنُودِ." — صموئيل الأول 17:45',
+        desc:'بمقلاع وخمسة أحجار فقط، ثق داود بالله وهزم العملاق جليات!'},
+      ps:{title:'داود او جولیات',
+        verse:'"زه ستا سره د قادر خدای د لښکر رب په نوم راځم." — ۱ سموئیل ۱۷:۴۵',
+        desc:'د ګولۍ او پنځو ډبرو سره، داود خدای ته ایمان درلود او لوی جولیات یې ماته کړ!'},
+      am:{title:'ዳዊት እና ጎልያት',
+        verse:'"እኔ በሠራዊት ጌታ በእግዚአብሔር ስም ወደ አንተ እመጣለሁ።" — 1ሳሙኤል 17:45',
+        desc:'ዳዊት በእግዚአብሔር ታምኖ ጎልያትን ድል አደረገ!'},
+      mn:{title:'Давид ба Голиат',
+        verse:'"Би Эзэн Бурханы нэрээр чиний эсрэг ирж байна." — 1 Самуел 17:45',
+        desc:'Давид Бурханд итгэж, аварга Голиатыг ялав!'},
+    }
+  },
+  {
+    slug:'jesus-loves-me-01', bible_story:'Jesus Loves the Children',
+    bible_ref:'Matthew 19:14', age_group:'toddler', difficulty:'very_easy',
+    tags:['jesus','love','children','blessing','heaven'],
+    svg_url:'coloring/jesus/jesus-loves-me-01.svg',
+    translations:{
+      en:{title:'Jesus Loves the Children',
+        verse:'"Let the little children come to me… for the kingdom of heaven belongs to such as these." — Matthew 19:14',
+        desc:'Jesus welcomed every child with open arms. You are loved by Jesus!'},
+      ko:{title:'예수님은 어린이를 사랑하세요',
+        verse:'"어린 아이들이 내게 오는 것을 용납하고 금하지 말라" — 마태복음 19:14',
+        desc:'예수님은 모든 어린이를 두 팔 벌려 환영하셨어요. 예수님은 나를 사랑하세요!'},
+      es:{title:'Jesús Ama a los Niños',
+        verse:'"Dejen que los niños vengan a mí, y no se lo impidan." — Mateo 19:14',
+        desc:'¡Jesús recibió a cada niño con los brazos abiertos. Tú eres amado por Jesús!'},
+      fr:{title:'Jésus Aime les Enfants',
+        verse:'"Laissez venir à moi les petits enfants." — Matthieu 19:14',
+        desc:'Jésus a accueilli chaque enfant à bras ouverts. Tu es aimé par Jésus!'},
+      pt:{title:'Jesus Ama as Crianças',
+        verse:'"Deixai as crianças virem a mim, e não as impeçais." — Mateus 19:14',
+        desc:'Jesus recebeu cada criança de braços abertos. Você é amado por Jesus!'},
+      ar:{title:'يَسُوعُ يُحِبُّ الأَطْفَالَ',
+        verse:'"دَعُوا الأَوْلَادَ يَأْتُونَ إِلَيَّ وَلَا تَمْنَعُوهُمْ." — متى 19:14',
+        desc:'رحّب يسوع بكل طفل بذراعين مفتوحتين. أنتَ محبوبٌ من يسوع!'},
+      ps:{title:'عیسی ماشومان سره مینه لري',
+        verse:'"ماشومانو ته اجازه ورکړئ چې ما ته راشي." — متی ۱۹:۱۴',
+        desc:'عیسی هر ماشوم له خلاصو لاسونو سره ښه راغلاست وویله. تاسو د عیسی له خوا محبوب یاست!'},
+      am:{title:'ኢየሱስ ልጆችን ይወዳል',
+        verse:'"ሕፃናት ወደ እኔ ይምጡ፤ አትከልክሏቸው።" — ማቴዎስ 19:14',
+        desc:'ኢየሱስ እያንዳንዱን ልጅ በክፍት ክንዶች ተቀበለ። አንተ በኢየሱስ ትወደዳለህ!'},
+      mn:{title:'Есүс Хүүхдүүдийг Хайрладаг',
+        verse:'"Хүүхдүүдийг Надад ирэхийг зөвшөөр." — Матай 19:14',
+        desc:'Есүс хүүхэд бүрийг нээлттэй гараар угтав. Есүс чамайг хайрладаг!'},
+    }
+  },
+  {
+    slug:'easter-resurrection-01', bible_story:'The Resurrection',
+    bible_ref:'Luke 24:6', age_group:'early', difficulty:'easy',
+    tags:['easter','resurrection','empty tomb','hope','alive','sunday'],
+    svg_url:'coloring/easter/easter-resurrection-01.svg',
+    translations:{
+      en:{title:'The Resurrection',
+        verse:'"He is not here; he has risen!" — Luke 24:6',
+        desc:'On the first Easter morning, Jesus rose from the dead! The empty tomb means Jesus is alive!'},
+      ko:{title:'부활',
+        verse:'"그가 여기 계시지 않고 살아나셨느니라" — 누가복음 24:6',
+        desc:'첫 번째 부활절 아침, 예수님이 살아나셨어요! 빈 무덤은 예수님이 살아계심을 보여줘요!'},
+      es:{title:'La Resurrección',
+        verse:'"¡No está aquí; ha resucitado!" — Lucas 24:6',
+        desc:'En la primera mañana de Pascua, Jesús resucitó de entre los muertos!'},
+      fr:{title:'La Résurrection',
+        verse:"\"Il n'est pas ici, il est ressuscité!\" — Luc 24:6",
+        desc:'Le matin de la première Pâques, Jésus est ressuscité!'},
+      pt:{title:'A Ressurreição',
+        verse:'"Ele não está aqui, ressuscitou!" — Lucas 24:6',
+        desc:'Na primeira manhã de Páscoa, Jesus ressuscitou dos mortos!'},
+      ar:{title:'القِيَامَة',
+        verse:'"لَيْسَ هُوَ هَهُنَا، بَلْ قَامَ!" — لوقا 24:6',
+        desc:'في صباح أحد القيامة الأول، قام يسوع من بين الأموات!'},
+      ps:{title:'بیا ژوندي کیدل',
+        verse:'"هغه دلته نشته؛ ژوندی شوی دی!" — لوقا ۲۴:۶',
+        desc:'عیسی د مړو له منځه راپاڅید! خالي قبر دا ثابتوي چې عیسی ژوندی دی!'},
+      am:{title:'ትንሳኤ',
+        verse:'"ሞቶ ተነሳ!" — ሉቃስ 24:6',
+        desc:'ኢየሱስ ከሞት ተነሳ! ባዶው መቃብር ኢየሱስ ሕያው መሆኑን ያረጋግጣል!'},
+      mn:{title:'Амилалт',
+        verse:'"Тэр энд байхгүй; амилсан!" — Лук 24:6',
+        desc:'Есүс үхлийг ялав! Хоосон булш Есүс амьд гэдгийг нотолно!'},
+    }
+  },
+  {
+    slug:'good-shepherd-01', bible_story:'The Good Shepherd',
+    bible_ref:'Psalm 23:1-3', age_group:'preschool', difficulty:'very_easy',
+    tags:['shepherd','sheep','psalm','comfort','provision','guidance'],
+    svg_url:'coloring/shepherd/good-shepherd-01.svg',
+    translations:{
+      en:{title:'The Good Shepherd',
+        verse:'"The LORD is my shepherd, I lack nothing." — Psalm 23:1',
+        desc:'Jesus is our Good Shepherd. He leads us, protects us, and takes care of us every day!'},
+      ko:{title:'선한 목자',
+        verse:'"여호와는 나의 목자시니 내게 부족함이 없으리로다" — 시편 23:1',
+        desc:'예수님은 우리의 선한 목자예요. 그분은 우리를 인도하시고 보호하시며 매일 돌봐 주세요!'},
+      es:{title:'El Buen Pastor',
+        verse:'"El Señor es mi pastor, nada me falta." — Salmo 23:1',
+        desc:'Jesús es nuestro Buen Pastor. Él nos guía, protege y cuida de nosotros cada día!'},
+      fr:{title:'Le Bon Berger',
+        verse:"\"L'Éternel est mon berger: je ne manquerai de rien.\" — Psaume 23:1",
+        desc:'Jésus est notre Bon Berger. Il nous guide, nous protège et prend soin de nous!'},
+      pt:{title:'O Bom Pastor',
+        verse:'"O Senhor é o meu pastor, nada me faltará." — Salmo 23:1',
+        desc:'Jesus é o nosso Bom Pastor. Ele nos guia, protege e cuida de nós todos os dias!'},
+      ar:{title:'الرَّاعِي الصَّالِح',
+        verse:'"اَلرَّبُّ رَاعِيَّ فَلاَ يُعْوِزُنِي شَيْءٌ." — مزمور 23:1',
+        desc:'يسوع هو راعينا الصالح. يقودنا ويحمينا ويعتني بنا كل يوم!'},
+      ps:{title:'ښه رعیتدار',
+        verse:'"خداوند زما شپون دی، هیڅ شی نه راته کمیږي." — مزامیر 23:1',
+        desc:'عیسی زمونږ ښه رعیتدار دی. هغه موږ لارښوونه کوي، ساتي او زمونږ پاملرنه کوي!'},
+      am:{title:'መልካሙ እረኛ',
+        verse:'"እግዚአብሔር እረኛዬ ነው፤ የሚሆነኝ ምንም አይጠፋም።" — መዝሙር 23:1',
+        desc:'ኢየሱስ ጥሩ እረኛችን ነው። ይመራናል፣ ይጠብቀናል፣ ሁልጊዜም ይንከባከበናል!'},
+      mn:{title:'Сайн Малчин',
+        verse:'"Эзэн бол миний малчин; Надад дутах зүйл байхгүй." — Дуулал 23:1',
+        desc:'Есүс бидний Сайн Малчин. Тэр биднийг чиглүүлж, хамгаалж, халамжилдаг!'},
+    }
+  },
+  {
+    slug:'creation-day-01', bible_story:'God Creates the World',
+    bible_ref:'Genesis 1:1-31', age_group:'early', difficulty:'easy',
+    tags:['creation','genesis','earth','light','sky','animals','plants'],
+    svg_url:'coloring/creation/creation-day-01.svg',
+    translations:{
+      en:{title:'God Creates the World',
+        verse:'"In the beginning God created the heavens and the earth." — Genesis 1:1',
+        desc:'In six days God made the sky, sea, land, plants, animals, and people. Everything was very good!'},
+      ko:{title:'하나님이 세상을 만드셨어요',
+        verse:'"태초에 하나님이 천지를 창조하시니라" — 창세기 1:1',
+        desc:'하나님은 6일 동안 하늘, 바다, 땅, 식물, 동물, 사람을 만드셨어요!'},
+      es:{title:'Dios Crea el Mundo',
+        verse:'"En el principio creó Dios los cielos y la tierra." — Génesis 1:1',
+        desc:'En seis días Dios hizo el cielo, el mar, la tierra, las plantas, los animales y las personas!'},
+      fr:{title:'Dieu Crée le Monde',
+        verse:'"Au commencement, Dieu créa les cieux et la terre." — Genèse 1:1',
+        desc:'En six jours, Dieu a créé le ciel, la mer, la terre, les plantes, les animaux et les gens!'},
+      pt:{title:'Deus Cria o Mundo',
+        verse:'"No princípio, Deus criou os céus e a terra." — Gênesis 1:1',
+        desc:'Em seis dias Deus fez o céu, o mar, a terra, as plantas, os animais e as pessoas!'},
+      ar:{title:'اللهُ يَخْلُقُ العَالَم',
+        verse:'"فِي الْبَدْءِ خَلَقَ اللهُ السَّمَاوَاتِ وَالأَرْضَ." — تكوين 1:1',
+        desc:'في ستة أيام خلق الله السماء والبحر والأرض والنباتات والحيوانات والناس!'},
+      ps:{title:'خدای نړۍ پیدا کوي',
+        verse:'"د پیل نه خدای اسمانونه او ځمکه پیدا کړه." — پیدایش 1:1',
+        desc:'خدای شپږو ورځو کې اسمان، سمندر، ځمکه، بوټي، حیوانات او خلک پیدا کړل!'},
+      am:{title:'እግዚአብሔር ዓለምን ይፈጥራል',
+        verse:'"በመጀመሪያ እግዚአብሔር ሰማያትንና ምድርን ፈጠረ።" — ዘፍጥረት 1:1',
+        desc:'እግዚአብሔር በስድስት ቀናት ሰማይ፣ ባህር፣ ምድር፣ ዕጽዋት፣ እንስሳት እና ሰዎችን ፈጠረ!'},
+      mn:{title:'Бурхан Ертөнцийг Бүтээжээ',
+        verse:'"Эхэнд Бурхан тэнгэр ба газрыг бүтээлэ." — Эхлэл 1:1',
+        desc:'Зургаан хоногт Бурхан тэнгэр, далай, газар, ургамал, амьтан, хүнийг бүтээв!'},
+    }
+  },
+];
+
+/* ── Labels ──────────────────────────────────────────────── */
+const AGE_LABELS = {
+  toddler:'Toddler (2-4)', preschool:'Preschool (3-5)', early:'Early (5-7)',
+  elementary:'Elementary (7-10)', tween:'Tween (10-13)', teen:'Teen', adult:'Adult'
+};
+const DIFF_LABELS = { very_easy:'★', easy:'★★', medium:'★★★', detailed:'★★★★' };
+
+/* ── App state ───────────────────────────────────────────── */
+let currentLang  = 'en';
+let currentQuery = '';
+let currentSlug  = '';
+
+/* ── Page routing ────────────────────────────────────────── */
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + name);
+  if (el) el.classList.add('active');
+  window.scrollTo(0, 0);
+  if (name !== 'detail') document.documentElement.removeAttribute('dir');
+}
+
+/* ── Sheet card HTML ─────────────────────────────────────── */
+function sheetCard(s, lang) {
+  const t = s.translations[lang] || s.translations.en;
+  const isConverted = !!s.converted;
+  const imgHtml = isConverted
+    ? `<img src="${s.svg_url}" alt="${t.title}" style="width:100%;height:100%;object-fit:contain;background:#fff">`
+    : `<img src="${s.svg_url}" alt="${t.title}" loading="lazy"
+           onerror="this.parentNode.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem\\'>🎨</div>'">`;
+  const badge = isConverted ? '<span class="converted-badge">Converted</span>' : '';
+  return `<div class="sheet-card" onclick="openSheet('${s.slug}')">
+    <div class="sheet-thumb" style="position:relative">
+      ${imgHtml}${badge}
+    </div>
+    <div class="sheet-info">
+      <div class="sheet-title">${t.title}</div>
+      <div class="sheet-meta">${AGE_LABELS[s.age_group]||s.age_group} &nbsp;·&nbsp; ${DIFF_LABELS[s.difficulty]||''}</div>
+    </div>
+  </div>`;
+}
+
+/* ── Home page ───────────────────────────────────────────── */
+function renderHome() {
+  const gridEl = document.getElementById('home-grid');
+  if (gridEl) gridEl.innerHTML = SHEETS.map(s => sheetCard(s, currentLang)).join('');
+}
+
+/* quickSearch — called by popular tag chips in home page HTML */
+function quickSearch(tag) {
+  const inp = document.getElementById('search-q');
+  if (inp) inp.value = tag;
+  const hInp = document.getElementById('home-q');
+  if (hInp) hInp.value = tag;
+  currentQuery = tag;
+  renderSearch(tag, currentLang, '', '');
+  showPage('search');
+}
+
+/* ── Search ──────────────────────────────────────────────── */
+function doSearch(e) {
+  if (e) e.preventDefault();
+  // Pick whichever input has a value (home-q or search-q)
+  const homeQ   = document.getElementById('home-q');
+  const searchQ = document.getElementById('search-q');
+  const q = (searchQ && searchQ.value.trim()) || (homeQ && homeQ.value.trim()) || '';
+  // Sync both inputs
+  if (homeQ)   homeQ.value   = q;
+  if (searchQ) searchQ.value = q;
+  currentQuery = q;
+  const age  = (document.getElementById('f-age')  || {}).value || '';
+  const diff = (document.getElementById('f-diff') || {}).value || '';
+  renderSearch(q, currentLang, age, diff);
+  showPage('search');
+}
+
+function applyFilters() {
+  const searchQ = document.getElementById('search-q');
+  const homeQ   = document.getElementById('home-q');
+  const q = (searchQ && searchQ.value.trim()) || (homeQ && homeQ.value.trim()) || currentQuery;
+  const age  = (document.getElementById('f-age')  || {}).value || '';
+  const diff = (document.getElementById('f-diff') || {}).value || '';
+  renderSearch(q, currentLang, age, diff);
+}
+
+function renderSearch(q, lang, age, diff) {
+  currentQuery = q;
+  const ql = (q || '').toLowerCase();
+  const results = SHEETS.filter(s => {
+    const t = s.translations[lang] || s.translations.en;
+    const hay = [s.bible_story, s.bible_ref, t.title, t.verse, t.desc, ...s.tags]
+                .join(' ').toLowerCase();
+    return (!ql || hay.includes(ql))
+        && (!age  || s.age_group  === age)
+        && (!diff || s.difficulty === diff);
+  });
+
+  const countEl = document.getElementById('result-count');
+  if (countEl) countEl.textContent = results.length
+    ? `${results.length} sheet${results.length > 1 ? 's' : ''}${q ? ` for "${q}"` : ''}`
+    : '';
+
+  const noResultsEl = document.getElementById('no-results');
+  const gridEl      = document.getElementById('search-grid');
+  if (noResultsEl) noResultsEl.classList.toggle('hidden', results.length > 0);
+  if (gridEl) gridEl.innerHTML = results.map(s => sheetCard(s, lang)).join('');
+}
+
+/* ── Detail page ─────────────────────────────────────────── */
+function openSheet(slug) {
+  currentSlug = slug;
+  renderDetail(slug, currentLang);
+  showPage('detail');
+}
+
+function renderDetail(slug, lang) {
+  const sheet = SHEETS.find(s => s.slug === slug);
+  if (!sheet) return;
+  const t = sheet.translations[lang] || sheet.translations.en;
+
+  // RTL direction
+  const isRTL = RTL_LANGS.has(lang);
+  if (isRTL) document.documentElement.setAttribute('dir', 'rtl');
+  else        document.documentElement.removeAttribute('dir');
+
+  // Print-only title + description (above SVG on print)
+  const printTitle = document.getElementById('print-sheet-title');
+  if (printTitle) printTitle.textContent = t.title;
+  const printDesc = document.getElementById('print-sheet-desc');
+  if (printDesc) printDesc.innerHTML =
+    `<span class="desc-ref">${sheet.bible_ref}</span> ${t.desc || ''}`;
+
+  // SVG / image display
+  const svgFrame = document.getElementById('detail-svg-frame');
+  if (svgFrame) {
+    if (sheet.converted && sheet.svg_url.startsWith('data:')) {
+      // Converted sheet: show as <img> with data URL
+      svgFrame.innerHTML = `<img src="${sheet.svg_url}" alt="${t.title}"
+        style="width:100%;height:auto;display:block;border-radius:8px">`;
+    } else {
+      svgFrame.innerHTML = `<img src="${sheet.svg_url}" alt="${t.title}"
+        style="width:100%;height:auto;display:block;border-radius:8px"
+        onerror="this.parentNode.innerHTML='<div class=\\'svg-placeholder\\'>🎨<br><small>${sheet.bible_story}</small></div>'">`;
+    }
+  }
+
+  // Verse block
+  const verseEl = document.getElementById('detail-verse');
+  if (verseEl) {
+    verseEl.textContent = t.verse;
+    verseEl.dir = isRTL ? 'rtl' : '';
+  }
+
+  // Screen metadata
+  const titleEl = document.getElementById('detail-title');
+  if (titleEl) titleEl.textContent = t.title;
+  const refEl = document.getElementById('detail-ref');
+  if (refEl) refEl.textContent = sheet.bible_ref;
+  const descEl = document.getElementById('detail-desc');
+  if (descEl) descEl.textContent = t.desc || '';
+
+  // Tags
+  const tagsEl = document.getElementById('detail-tags');
+  if (tagsEl) tagsEl.innerHTML = sheet.tags
+    .map(tag => `<span class="tag-pill">${tag}</span>`).join('');
+
+  // Language selector — sync to current lang
+  const langSel = document.getElementById('lang-sel');
+  if (langSel) langSel.value = lang;
+}
+
+/* changeLang — called by the lang-sel onchange in HTML */
+function changeLang(lang) {
+  currentLang = lang;
+  renderDetail(currentSlug, lang);
+}
+
+/* ── Back button ─────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function () {
+  const bb = document.getElementById('back-btn');
+  if (bb) bb.addEventListener('click', function (e) {
+    e.preventDefault();
+    document.documentElement.removeAttribute('dir');
+    showPage(currentQuery ? 'search' : 'home');
+  });
+});
+
+/* ── PDF alert ───────────────────────────────────────────── */
+function alertPdf(e) {
+  if (e) e.preventDefault();
+  const folder = currentSlug.split('-').slice(0, -1).join('/');
+  alert('In production: /coloring/' + folder + '/' + currentSlug + '.pdf\nDemo: Open SVG → Print → Save as PDF.');
+}
+
+/* ══════════════════════════════════════════════════════════
+   MISSION CONTENT CONVERTER MODULE
+══════════════════════════════════════════════════════════ */
+
+const CV = {
+  file: null, objectUrl: null, mode: 'bw', lang: 'en', threshold: 128,
+  uploadId: null, cancelled: false,
+  extracted: { title:'', verse:'', desc:'', tags:'', language:'en', print_mode:'bw', pages:[], illustrations:[] },
+  copyrightStatus: 'clear', copyrightDetail: '', bwImageData: null,
+};
+
+/* ── Upload ──────────────────────────────────────────────── */
+function cvDragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('dragover'); }
+function cvDragLeave()  { document.getElementById('upload-zone').classList.remove('dragover'); }
+function cvDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('dragover');
+  if (e.dataTransfer.files[0]) cvAcceptFile(e.dataTransfer.files[0]);
+}
+function cvFileChosen(inp) { if (inp.files[0]) cvAcceptFile(inp.files[0]); }
+
+const CV_TYPES = ['image/png','image/jpeg','image/svg+xml','application/pdf'];
+
+function cvAcceptFile(file) {
+  if (!CV_TYPES.includes(file.type) && !file.name.match(/\.(png|jpe?g|svg|pdf)$/i)) {
+    alert('Unsupported type. Use PNG, JPG, SVG, or PDF.'); return;
+  }
+  if (file.size > 10485760) { alert('Max 10 MB.'); return; }
+  if (CV.objectUrl) URL.revokeObjectURL(CV.objectUrl);
+  CV.file = file;
+  CV.objectUrl = URL.createObjectURL(file);
+  CV.uploadId  = 'uid_' + Date.now().toString(36);
+  document.getElementById('file-pill-name').textContent = file.name + ' (' + cvFmtSize(file.size) + ')';
+  document.getElementById('file-pill').style.display = 'flex';
+  const ic = document.querySelector('#upload-zone .upload-icon');
+  if (ic) ic.textContent = file.type === 'application/pdf' ? '📑'
+                          : file.type === 'image/svg+xml'  ? '🎨' : '🖼️';
+}
+function cvClearFile() {
+  if (CV.objectUrl) URL.revokeObjectURL(CV.objectUrl);
+  CV.file = null; CV.objectUrl = null;
+  document.getElementById('file-pill').style.display = 'none';
+  document.getElementById('file-input').value = '';
+  const ic = document.querySelector('#upload-zone .upload-icon');
+  if (ic) ic.textContent = '📄';
+}
+function cvFmtSize(b) {
+  return b < 1024 ? b + ' B' : b < 1048576 ? (b/1024).toFixed(1) + ' KB' : (b/1048576).toFixed(1) + ' MB';
+}
+function cvSetMode(btn) {
+  document.querySelectorAll('.mode-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active'); CV.mode = btn.dataset.mode;
+}
+
+/* ── Pipeline ────────────────────────────────────────────── */
+async function cvStartConversion() {
+  if (!CV.file) { alert('Choose a file first.'); return; }
+  if (!document.getElementById('cv-ack').checked) {
+    alert('Please confirm copyright clearance.'); return;
+  }
+  CV.lang = document.getElementById('cv-lang').value;
+  CV.threshold = parseInt(document.getElementById('cv-threshold').value, 10);
+  CV.cancelled = false;
+  CV.extracted = { title:'', verse:'', desc:'', tags:'', language:CV.lang,
+                   print_mode:CV.mode, pages:[], illustrations:[] };
+  showPage('pipeline');
+  for (let i = 1; i <= 6; i++) cvSetStep(i, 'pending', '');
+  cvSetProgress(0, 'Preparing…');
+  await cvDelay(300);
+  if (!CV.cancelled) await cvRunStep1();
+  if (!CV.cancelled) await cvRunStep2();
+  if (!CV.cancelled) await cvRunStep3();
+  if (!CV.cancelled) await cvRunStep4();
+  if (!CV.cancelled) await cvRunStep5();
+  if (!CV.cancelled) await cvRunStep6();
+  if (!CV.cancelled) { cvSetProgress(100, 'Done!'); await cvDelay(600); cvShowResult(); }
+}
+function cvCancel() { CV.cancelled = true; showPage('converter'); }
+
+function cvSetProgress(pct, label) {
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = label;
+}
+function cvSetStep(n, state, detail) {
+  const el = document.getElementById('step-' + n); if (!el) return;
+  el.className = 'p-step ' + state;
+  const b = el.querySelector('.badge');
+  if (b) { b.className = 'badge ' + state; b.textContent = state.charAt(0).toUpperCase() + state.slice(1); }
+  const d = el.querySelector('.p-step-desc'); if (d && detail) d.textContent = detail;
+}
+function cvDelay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function cvRunStep1() {
+  cvSetStep(1, 'active', 'Reading file metadata…'); cvSetProgress(5, 'Step 1: File Intake');
+  await cvDelay(700);
+  const ext = CV.file.name.split('.').pop().toUpperCase();
+  cvSetStep(1, 'done', `✓ ${ext} · ${cvFmtSize(CV.file.size)} · id: ${CV.uploadId}`);
+  cvSetProgress(16, 'Step 1 complete'); await cvDelay(300);
+}
+
+async function cvRunStep2() {
+  cvSetStep(2, 'active', 'Scanning for copyright indicators…'); cvSetProgress(18, 'Step 2: Copyright Safety');
+  await cvDelay(900);
+  const n = CV.file.name.toLowerCase();
+  if (n.includes('scan') || n.includes('copy') || n.includes('workbook') || n.includes('©')) {
+    CV.copyrightStatus = 'warn';
+    CV.copyrightDetail = '⚠️ Filename suggests a scanned or commercial document. Marked "Needs Review".';
+    cvSetStep(2, 'warn', CV.copyrightDetail);
+  } else {
+    CV.copyrightStatus = 'clear';
+    CV.copyrightDetail = '✓ No copyright flags detected.';
+    cvSetStep(2, 'done', CV.copyrightDetail);
+  }
+  cvSetProgress(33, 'Step 2 complete'); await cvDelay(300);
+}
+
+const MOCK_EXT = [
+  { title:'Jesus Loves Me', verse:'John 3:16', desc:'God so loved the world that He gave His one and only Son.', tags:'jesus,love,salvation,children' },
+  { title:'Noah and the Ark', verse:'Genesis 6:9', desc:'Noah walked faithfully with God and built the ark.', tags:'noah,ark,flood,faith' },
+  { title:'David and Goliath', verse:'1 Samuel 17:45', desc:'David trusted God and defeated Goliath with a sling.', tags:'david,goliath,faith,courage' },
+  { title:'The Good Shepherd', verse:'Psalm 23:1', desc:'The Lord is my shepherd; I shall not want.', tags:'shepherd,sheep,comfort' },
+];
+async function cvRunStep3() {
+  cvSetStep(3, 'active', 'Extracting title, verses, and structure…'); cvSetProgress(35, 'Step 3: Content Extraction');
+  await cvDelay(1100);
+  const n = CV.file.name.toLowerCase();
+  const found = MOCK_EXT.find(m => n.includes(m.title.split(' ')[0].toLowerCase()))
+              || MOCK_EXT[Math.floor(Math.random() * MOCK_EXT.length)];
+  Object.assign(CV.extracted, { title:found.title, verse:found.verse, desc:found.desc,
+                                 tags:found.tags, pages:['page_1'], illustrations:['illus_1'] });
+  cvSetStep(3, 'done', `✓ Title: "${found.title}" · Verse: ${found.verse}`);
+  cvSetProgress(50, 'Step 3 complete'); await cvDelay(300);
+}
+
+async function cvRunStep4() {
+  cvSetStep(4, 'active', 'Converting illustration…'); cvSetProgress(52, 'Step 4: Illustration Processing');
+  await cvDelay(400);
+  const isRaster = CV.file.type.startsWith('image/') && CV.file.type !== 'image/svg+xml';
+  if (isRaster) {
+    try {
+      await cvProcessImage();
+      const ml = CV.mode === 'outline' ? 'outline' : CV.mode === 'grayscale' ? 'grayscale' : 'B&W threshold';
+      cvSetStep(4, 'done', `✓ Converted to ${ml} (threshold: ${CV.threshold})`);
+    } catch (err) { cvSetStep(4, 'warn', '⚠️ Image processing partial: ' + err.message); }
+  } else if (CV.file.type === 'image/svg+xml') {
+    await cvDelay(600); cvSetStep(4, 'done', '✓ SVG detected — path simplification applied');
+  } else {
+    await cvDelay(800); cvSetStep(4, 'done', '✓ PDF rasterised (mock) · B&W applied');
+  }
+  cvSetProgress(66, 'Step 4 complete'); await cvDelay(300);
+}
+
+async function cvProcessImage() {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const maxW = 560, scale = Math.min(1, maxW / img.naturalWidth);
+      const w = Math.round(img.naturalWidth * scale), h = Math.round(img.naturalHeight * scale);
+      const before = document.getElementById('canvas-before');
+      before.width = w; before.height = h;
+      before.getContext('2d').drawImage(img, 0, 0, w, h);
+      const after = document.getElementById('canvas-after');
+      after.width = w; after.height = h;
+      const ctx = after.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const id = ctx.getImageData(0, 0, w, h);
+      if (CV.mode === 'outline') {
+        cvGray(id.data); ctx.putImageData(id, 0, 0);
+        ctx.putImageData(cvSobel(ctx.getImageData(0, 0, w, h), w, h), 0, 0);
+      } else {
+        cvGray(id.data);
+        if (CV.mode === 'bw') cvThresh(id.data, CV.threshold);
+        ctx.putImageData(id, 0, 0);
+      }
+      CV.bwImageData = ctx.getImageData(0, 0, w, h);
+      resolve();
+    };
+    img.onerror = () => reject(new Error('Cannot load image'));
+    img.src = CV.objectUrl;
+  });
+}
+function cvGray(d) { for (let i = 0; i < d.length; i += 4) { const l = d[i]*.299+d[i+1]*.587+d[i+2]*.114; d[i]=d[i+1]=d[i+2]=l; } }
+function cvThresh(d, t) { for (let i = 0; i < d.length; i += 4) { const v = d[i]<t?0:255; d[i]=d[i+1]=d[i+2]=v; } }
+function cvSobel(src, w, h) {
+  const g = src.data, o = new Uint8ClampedArray(w*h*4);
+  function px(x,y) { return (x<0||y<0||x>=w||y>=h)?255:g[(y*w+x)*4]; }
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const gx = -px(x-1,y-1)+px(x+1,y-1) - 2*px(x-1,y)+2*px(x+1,y) - px(x-1,y+1)+px(x+1,y+1);
+    const gy = -px(x-1,y-1)-2*px(x,y-1)-px(x+1,y-1) + px(x-1,y+1)+2*px(x,y+1)+px(x+1,y+1);
+    const v = Math.sqrt(gx*gx+gy*gy) > CV.threshold*.35 ? 0 : 255;
+    const i = (y*w+x)*4; o[i]=o[i+1]=o[i+2]=v; o[i+3]=255;
+  }
+  return new ImageData(o, w, h);
+}
+
+const LNAMES = { en:'English',ko:'Korean',es:'Spanish',fr:'French',pt:'Portuguese',ar:'Arabic',ps:'Pashto',am:'Amharic',mn:'Mongolian' };
+
+async function cvRunStep5() {
+  cvSetStep(5, 'active', 'Preparing translation for ' + (LNAMES[CV.lang]||CV.lang) + '…');
+  cvSetProgress(68, 'Step 5: Translation Layer');
+  await cvDelay(900);
+  cvSetStep(5, 'done', CV.lang === 'en'
+    ? '✓ Source is English — no translation needed'
+    : `✓ [STUB] Translation to ${LNAMES[CV.lang]||CV.lang} queued — AI hook ready`);
+  cvSetProgress(83, 'Step 5 complete'); await cvDelay(300);
+}
+
+async function cvRunStep6() {
+  cvSetStep(6, 'active', 'Generating export files…'); cvSetProgress(85, 'Step 6: Export Package');
+  await cvDelay(1000);
+  cvSetStep(6, 'done', '✓ SVG generated · PDF stub ready · Offline pack compiled');
+  cvSetProgress(99, 'Finalizing…'); await cvDelay(400);
+}
+
+/* ── Result page ─────────────────────────────────────────── */
+function cvShowResult() {
+  const g = id => document.getElementById(id);
+  if (g('f-title')) g('f-title').value = CV.extracted.title;
+  if (g('f-verse')) g('f-verse').value = CV.extracted.verse;
+  if (g('f-desc'))  g('f-desc').value  = CV.extracted.desc;
+  if (g('f-tags'))  g('f-tags').value  = CV.extracted.tags;
+  cvSyncJson();
+
+  const banner = g('cv-copyright-banner');
+  if (banner) {
+    banner.style.display = 'block';
+    banner.className = CV.copyrightStatus === 'warn' ? 'cv-banner cv-banner-warn' : 'cv-banner cv-banner-ok';
+    banner.textContent = CV.copyrightStatus === 'warn'
+      ? CV.copyrightDetail
+      : '✓ Copyright check passed — cleared for sharing';
+  }
+
+  const bc = g('canvas-before');
+  if (bc && bc.width === 0) {
+    cvPlaceholder(bc, 'Original\n(SVG / PDF)');
+    cvPlaceholder(g('canvas-after'), 'Converted\n(B&W ready)');
+  }
+
+  // Publish button: disabled if copyright warn or block
+  const pubBtn = g('btn-publish');
+  if (pubBtn) {
+    const blocked = CV.copyrightStatus === 'warn' || CV.copyrightStatus === 'block';
+    pubBtn.disabled = blocked;
+    pubBtn.textContent = blocked ? '🚫 Publish Unavailable (Copyright)' : '🌐 Publish to Gallery';
+    pubBtn.title = blocked
+      ? 'This file has a copyright flag. Resolve the copyright status before publishing.'
+      : 'Add this sheet to the home gallery';
+    pubBtn.classList.toggle('btn-publish-blocked', blocked);
+  }
+
+  showPage('result');
+}
+
+function cvPlaceholder(canvas, text) {
+  if (!canvas) return;
+  canvas.width = 300; canvas.height = 200;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#f8fafc'; ctx.fillRect(0, 0, 300, 200);
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1.5; ctx.strokeRect(1, 1, 298, 198);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '14px system-ui'; ctx.textAlign = 'center';
+  text.split('\n').forEach((l, i) => ctx.fillText(l, 150, 95 + i*22));
+}
+
+function cvToggleJson() {
+  const fe = document.getElementById('content-fields');
+  const je = document.getElementById('content-json');
+  const btn = document.getElementById('btn-json');
+  if (je.style.display !== 'none') {
+    try {
+      const p = JSON.parse(document.getElementById('f-json').value);
+      document.getElementById('f-title').value = p.title || '';
+      document.getElementById('f-verse').value = p.verse || '';
+      document.getElementById('f-desc').value  = p.desc  || '';
+      document.getElementById('f-tags').value  = (p.tags || []).join(', ');
+    } catch(e) {}
+    fe.style.display = ''; je.style.display = 'none'; btn.textContent = 'Show JSON';
+  } else {
+    cvSyncJson(); fe.style.display = 'none'; je.style.display = ''; btn.textContent = 'Edit Fields';
+  }
+}
+
+function cvSyncJson() {
+  const g = id => { const e = document.getElementById(id); return e ? e.value : ''; };
+  const obj = {
+    upload_id: CV.uploadId,
+    title: g('f-title'), verse: g('f-verse'), desc: g('f-desc'),
+    tags: g('f-tags').split(',').map(t => t.trim()).filter(Boolean),
+    language: CV.lang, print_mode: CV.mode,
+    pages: CV.extracted.pages, illustrations: CV.extracted.illustrations,
+    copyright_status: CV.copyrightStatus,
+  };
+  const je = document.getElementById('f-json');
+  if (je) je.value = JSON.stringify(obj, null, 2);
+}
+
+function cvTranslate() {
+  const lang = document.getElementById('cv-translate-lang').value;
+  if (!lang) { alert('Select a target language.'); return; }
+  const title = document.getElementById('f-title').value;
+  const verse = document.getElementById('f-verse').value;
+  // Stub translations for demo — in production calls AI API
+  const stubTranslations = {
+    ko: { title: '성경 색칠 공부', verse: '번역된 성경 구절이 여기에 표시됩니다.' },
+    es: { title: 'Hoja para Colorear', verse: 'El versículo traducido aparecería aquí.' },
+    fr: { title: 'Page de Coloriage', verse: 'Le verset traduit apparaîtrait ici.' },
+    ar: { title: 'صفحة تلوين', verse: 'سيظهر الآية المترجمة هنا.' },
+    ps: { title: 'د رنګ کولو پاڼه', verse: 'ژباړل شوی آیت به دلته ښکاره شي.' },
+    am: { title: 'የቀለም ሥዕል', verse: 'የተተረጎመ ቁጥር እዚህ ይታያል።' },
+    mn: { title: 'Будах хуудас', verse: 'Орчуулсан эш үзүүлэл энд харагдана.' },
+    pt: { title: 'Página para Colorir', verse: 'O versículo traduzido apareceria aqui.' },
+  };
+  const stub = stubTranslations[lang];
+  if (stub) {
+    document.getElementById('f-title').value = stub.title;
+    document.getElementById('f-verse').value = stub.verse;
+    cvSyncJson();
+    alert(`✓ Demo translation applied (${LNAMES[lang]||lang}).\n\nIn production this calls an AI translation API to translate all fields accurately, preserving scripture references and RTL layout for Arabic/Pashto.`);
+  } else {
+    alert(`[Translation stub → ${LNAMES[lang]||lang}]\n\nTitle: "${title}"\nVerse: "${verse}"\n\nAI translation hook ready for integration.`);
+  }
+}
+
+/* ── Publish to gallery ──────────────────────────────────── */
+function cvPublish() {
+  if (CV.copyrightStatus === 'warn' || CV.copyrightStatus === 'block') {
+    alert('⚠️ 저작권 문제가 감지된 파일은 게시할 수 없습니다.\n\nThis file cannot be published due to a copyright flag.\nPlease use only public domain or personally created content.');
+    return;
+  }
+  const g = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  const title = g('f-title') || 'Untitled';
+  const verse = g('f-verse');
+  const desc  = g('f-desc');
+  const tags  = g('f-tags').split(',').map(t => t.trim()).filter(Boolean);
+  const lang  = document.getElementById('cv-translate-lang')
+              ? document.getElementById('cv-translate-lang').value || CV.lang
+              : CV.lang;
+
+  // Get image from converted canvas (or placeholder SVG)
+  const after = document.getElementById('canvas-after');
+  const imgUrl = after && after.width > 0 ? after.toDataURL('image/png') : cvMakeSVG();
+
+  // Build a slug from title
+  const slug = 'converted-' + title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+             + '-' + Date.now().toString(36);
+
+  // Build translations object — at minimum English + selected lang
+  const translations = {
+    en: { title, verse, desc },
+  };
+  if (lang !== 'en') {
+    translations[lang] = { title, verse, desc };
+  }
+
+  // Add to SHEETS array
+  const newSheet = {
+    slug,
+    bible_story: title,
+    bible_ref: verse.split('—')[1] ? verse.split('—')[1].trim() : verse,
+    age_group: 'early',
+    difficulty: 'easy',
+    tags: tags.length ? tags : ['converted'],
+    svg_url: imgUrl,
+    translations,
+    converted: true,          // flag to identify converter-generated sheets
+    published_at: new Date().toISOString(),
+    copyright_status: CV.copyrightStatus,
+  };
+  SHEETS.unshift(newSheet); // add to front of gallery
+
+  // Refresh grids if visible
+  renderHome();
+  const sq = document.getElementById('search-q');
+  if (sq) renderSearch(sq.value || '', currentLang, '', '');
+
+  // Show confirmation
+  const pubBtn = document.getElementById('btn-publish');
+  if (pubBtn) {
+    pubBtn.textContent = '✓ Published!';
+    pubBtn.disabled = true;
+    pubBtn.style.background = '#16a34a';
+    setTimeout(() => {
+      pubBtn.textContent = '✓ In Gallery';
+    }, 1500);
+  }
+
+  // Show toast
+  cvToast(`"${title}" added to the gallery! You can find it on the home page.`);
+}
+
+function cvToast(msg) {
+  let toast = document.getElementById('cv-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'cv-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);'
+      + 'background:#1e293b;color:#fff;padding:12px 20px;border-radius:8px;font-size:.875rem;'
+      + 'z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:opacity .3s;max-width:90vw;text-align:center';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => { toast.style.opacity = '0'; }, 3500);
+}
+
+/* ── Export helpers ──────────────────────────────────────── */
+function cvMakeSVG() {
+  const g = id => { const e = document.getElementById(id); return e ? e.value || '' : ''; };
+  const title = g('f-title') || 'Untitled', verse = g('f-verse'), desc = g('f-desc');
+  const after = document.getElementById('canvas-after');
+  const imgContent = after && after.width > 0
+    ? `<image href="${after.toDataURL('image/png')}" x="0" y="140" width="595" height="562" preserveAspectRatio="xMidYMid meet"/>`
+    : `<rect x="30" y="140" width="535" height="540" rx="8" fill="none" stroke="#ccc" stroke-width="1.5"/>
+  <text x="297" y="420" font-family="serif" font-size="18" fill="#aaa" text-anchor="middle">[Illustration]</text>`;
+  const x = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">
+  <rect width="595" height="842" fill="white"/>
+  <text x="297" y="50" font-family="serif" font-size="22" font-weight="bold" fill="#111" text-anchor="middle">${x(title)}</text>
+  <text x="297" y="78" font-family="serif" font-size="12" fill="#555" text-anchor="middle">${x(verse)}</text>
+  <text x="297" y="100" font-family="serif" font-size="10" fill="#777" text-anchor="middle">${x(desc.slice(0,120))}</text>
+  <line x1="40" y1="115" x2="555" y2="115" stroke="#ddd" stroke-width="1"/>
+  ${imgContent}
+  <line x1="40" y1="715" x2="555" y2="715" stroke="#ddd" stroke-width="1"/>
+  <text x="297" y="735" font-family="serif" font-size="11" font-style="italic" fill="#888" text-anchor="middle">${x(verse)}</text>
+  <text x="297" y="752" font-family="sans-serif" font-size="8" fill="#bbb" text-anchor="middle">littleseed.app — Free Bible Coloring Sheets</text>
+</svg>`;
+}
+
+function cvDl(blob, name) {
+  const u = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = u; a.download = name;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(u), 2000);
+}
+function cvExportSVG() {
+  cvDl(new Blob([cvMakeSVG()], {type:'image/svg+xml'}),
+    (document.getElementById('f-title').value || 'littleseed').replace(/\s+/g,'-').toLowerCase() + '.svg');
+}
+function cvExportPDF() {
+  const svg = cvMakeSVG(), w = window.open('', '_blank');
+  if (!w) { alert('Allow popups to print.'); return; }
+  w.document.write('<!DOCTYPE html><html><head><title>Print — LittleSeed</title>'
+    + '<style>@page{size:A4;margin:12mm 15mm 10mm}body{margin:0}img{width:100%;display:block}</style>'
+    + '</head><body><img src="data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)))
+    + '" alt="sheet"><script>window.onload=function(){window.print();window.close()}<\/script></body></html>');
+  w.document.close();
+}
+function cvExportPack() {
+  const m = {
+    version: '1.0', generated: new Date().toISOString(),
+    title: document.getElementById('f-title').value,
+    verse: document.getElementById('f-verse').value,
+    desc:  document.getElementById('f-desc').value,
+    tags:  document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    language: CV.lang, print_mode: CV.mode,
+    copyright_status: CV.copyrightStatus,
+    files: ['coloring.svg', 'manifest.json'],
+  };
+  cvDl(new Blob([cvMakeSVG()], {type:'image/svg+xml'}), 'coloring.svg');
+  setTimeout(() => cvDl(new Blob([JSON.stringify(m, null, 2)], {type:'application/json'}), 'manifest.json'), 400);
+  alert('Offline pack downloaded: coloring.svg + manifest.json');
+}
+
+/* ── Init ────────────────────────────────────────────────── */
+renderHome();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "name": "LittleSeed Bible Coloring",
+  "short_name": "LittleSeed",
+  "description": "Free Bible coloring sheets for children, missionaries, and Sunday school",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "lang": "en",
+  "categories": ["education", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.webp",
+      "sizes": "390x844",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Home — Search Bible coloring sheets"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Search Sheets",
+      "url": "/search",
+      "description": "Browse all coloring sheets"
+    }
+  ]
+}
