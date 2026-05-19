@@ -5,8 +5,6 @@ import Link              from 'next/link';
 import { getSheetBySlug } from '@/lib/search';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { PrintButton }      from '@/components/PrintButton';
-import LikeSaveBar          from '@/components/LikeSaveBar';
-import { getUser, getSheetUserState } from '@/lib/auth';
 import type { LanguageCode } from '@/lib/types';
 import { AGE_GROUP_LABELS, DIFFICULTY_LABELS } from '@/lib/types';
 
@@ -15,8 +13,8 @@ interface SheetPageProps {
   searchParams: { lang?: string };
 }
 
-// Dynamic: needs user auth state
-export const dynamic = 'force-dynamic';
+// Static generation: revalidate once per day
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params, searchParams,
@@ -51,13 +49,6 @@ export default async function SheetPage({ params, searchParams }: SheetPageProps
   const availableLangs  = sheet.all_translations.map(
     (tr) => tr.language_code as LanguageCode
   );
-
-  // Auth state for like/save (null-safe: guests get defaults)
-  const user      = await getUser();
-  const userState = user ? await getSheetUserState(params.slug) : null;
-  const liked     = userState?.liked  ?? false;
-  const saved     = userState?.saved  ?? false;
-  const likes     = userState?.likes  ?? (sheet as any).likes_count ?? 0;
 
   return (
     <>
@@ -185,15 +176,6 @@ export default async function SheetPage({ params, searchParams }: SheetPageProps
               {/* Print */}
               <PrintButton label="Print Coloring Sheet" />
             </div>
-
-            {/* Like / Save */}
-            <LikeSaveBar
-              slug={params.slug}
-              liked={liked}
-              saved={saved}
-              likes={likes}
-              loggedIn={!!user}
-            />
 
             {/* Tags */}
             {sheet.tags.length > 0 && (
