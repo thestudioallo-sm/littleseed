@@ -25,6 +25,10 @@ const LANG_NAMES: Record<LanguageCode, string> = {
   es: 'Español',
   fr: 'Français',
   pt: 'Português',
+  ar: 'العربية',
+  ps: 'پښتو',
+  am: 'አማርኛ',
+  mn: 'Монгол',
 };
 
 export function getLangName(code: LanguageCode): string {
