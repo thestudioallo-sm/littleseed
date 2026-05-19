@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { getSupabase } from './supabase';
 import type {
   SearchParams,
   SearchResult,
@@ -52,7 +52,7 @@ export async function searchSheets(params: SearchParams): Promise<{
   // ── Real Supabase path ─────────────────────────────────────
   const offset = (page - 1) * PAGE_SIZE;
 
-  const { data, error } = await supabase.rpc('search_coloring_pages', {
+  const { data, error } = await getSupabase().rpc('search_coloring_pages', {
     query_text:   q || '',
     lang_code:    lang,
     p_age_group:  age       ?? null,
@@ -112,7 +112,7 @@ export async function getSheetBySlug(
   }
 
   // ── Real Supabase path ─────────────────────────────────────
-  const { data: page, error: pageError } = await supabase
+  const { data: page, error: pageError } = await getSupabase()
     .from('coloring_pages')
     .select('*')
     .eq('slug', slug)
@@ -121,14 +121,25 @@ export async function getSheetBySlug(
 
   if (pageError || !page) return null;
 
-  const { data: translation } = await supabase
+  let { data: translation } = await getSupabase()
     .from('translations')
     .select('*')
     .eq('coloring_page_id', page.id)
     .eq('language_code', lang)
     .maybeSingle();
 
-  const { data: allTranslations } = await supabase
+  // Fall back to English when no translation exists for requested language
+  if (!translation && lang !== 'en') {
+    const { data: fallback } = await getSupabase()
+      .from('translations')
+      .select('*')
+      .eq('coloring_page_id', page.id)
+      .eq('language_code', 'en')
+      .maybeSingle();
+    translation = fallback;
+  }
+
+  const { data: allTranslations } = await getSupabase()
     .from('translations')
     .select('language_code, title')
     .eq('coloring_page_id', page.id);
@@ -153,7 +164,7 @@ export async function getRecentSheets(
     return MOCK_SHEETS.slice(0, limit);
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('coloring_pages')
     .select(`
       id, slug, bible_story, age_group, difficulty,
@@ -191,7 +202,7 @@ export async function getPopularSearches(lang = 'en'): Promise<string[]> {
     return MOCK_POPULAR_SEARCHES;
   }
 
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from('popular_searches')
     .select('keyword')
     .eq('lang_code', lang)

@@ -395,6 +395,318 @@ SELECT id, 'es',
 FROM coloring_pages WHERE slug = 'easter-resurrection-01';
 
 -- ============================================================
+-- TRANSLATIONS — French (fr)
+-- ============================================================
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'fr',
+  'Noé et l''Arche',
+  '"Noé était un homme juste, intègre parmi ses contemporains, et il marchait avec Dieu." — Genèse 6:9',
+  'Noé a fait confiance à Dieu et a construit l''arche comme Dieu le lui avait commandé. Colorie les animaux qui entrent deux par deux !',
+  ARRAY['noé','arche','déluge','obéissance','animaux','arc-en-ciel']
+FROM coloring_pages WHERE slug = 'noah-ark-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'fr',
+  'David et Goliath',
+  '"David dit au Philistin : Tu viens à moi avec une épée… mais moi, je viens à toi au nom du Seigneur." — 1 Samuel 17:45',
+  'Avec seulement une fronde et cinq pierres, David a fait confiance à Dieu et a vaincu le géant Goliath !',
+  ARRAY['david','goliath','courage','géant','foi','victoire']
+FROM coloring_pages WHERE slug = 'david-goliath-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'fr',
+  'Jésus aime les enfants',
+  '"Laissez les petits enfants venir à moi, et ne les en empêchez pas ; car le royaume des cieux est pour ceux qui leur ressemblent." — Matthieu 19:14',
+  'Jésus accueillait chaque enfant à bras ouverts. Tu es aimé de Jésus !',
+  ARRAY['jésus','amour','enfants','bénédiction','ciel','bienvenue']
+FROM coloring_pages WHERE slug = 'jesus-loves-me-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'fr',
+  'La Résurrection',
+  '"Il n''est pas ici ; il est ressuscité !" — Luc 24:6',
+  'Le matin de Pâques, Jésus est ressuscité des morts ! Le tombeau était vide car Jésus est vivant !',
+  ARRAY['pâques','résurrection','tombeau vide','ressuscité','vivant','espoir']
+FROM coloring_pages WHERE slug = 'easter-resurrection-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'fr',
+  'Jonas et le grand poisson',
+  '"Le Seigneur fit venir un grand poisson pour avaler Jonas, et Jonas fut dans le ventre du poisson trois jours et trois nuits." — Jonas 1:17',
+  'Dieu a appelé Jonas, mais Jonas a fui. Dieu l''a quand même sauvé du grand poisson. Colorie Jonas dans la baleine !',
+  ARRAY['jonas','baleine','grand poisson','prière','trois jours','obéissance']
+FROM coloring_pages WHERE slug = 'jonah-whale-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'fr',
+  'Le bon Samaritain',
+  '"Lequel de ces trois te semble avoir été le prochain de celui qui était tombé entre les mains des brigands ?" — Luc 10:36',
+  'Jésus nous a appris à aimer notre prochain. Le Samaritain a montré de la bonté quand les autres passaient sans s''arrêter.',
+  ARRAY['samaritain','prochain','bonté','parabole','aide','amour','compassion']
+FROM coloring_pages WHERE slug = 'good-samaritan-01';
+
+-- ============================================================
+-- TRANSLATIONS — Portuguese (pt)
+-- ============================================================
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'pt',
+  'Noé e a Arca',
+  '"Noé era um homem justo e íntegro entre os seus contemporâneos, e andava com Deus." — Gênesis 6:9',
+  'Noé confiou em Deus e construiu a arca como Deus ordenou. Pinte os animais entrando dois a dois!',
+  ARRAY['noé','arca','dilúvio','obediência','animais','arco-íris']
+FROM coloring_pages WHERE slug = 'noah-ark-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'pt',
+  'Davi e Golias',
+  '"Davi disse ao filisteu: Você vem contra mim com espada… mas eu venho contra você em nome do Senhor." — 1 Samuel 17:45',
+  'Com apenas uma funda e cinco pedras, Davi confiou em Deus e derrotou o gigante Golias!',
+  ARRAY['davi','golias','coragem','gigante','fé','vitória']
+FROM coloring_pages WHERE slug = 'david-goliath-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'pt',
+  'Jesus ama as crianças',
+  '"Deixai as crianças virem a mim e não as impeçais, porque o reino dos céus pertence aos que são como elas." — Mateus 19:14',
+  'Jesus recebia cada criança de braços abertos. Você é amado por Jesus!',
+  ARRAY['jesus','amor','crianças','bênção','céu','boas-vindas']
+FROM coloring_pages WHERE slug = 'jesus-loves-me-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'pt',
+  'A Ressurreição',
+  '"Ele não está aqui; ressuscitou!" — Lucas 24:6',
+  'Na manhã da Páscoa, Jesus ressuscitou dos mortos! O túmulo estava vazio porque Jesus está vivo!',
+  ARRAY['páscoa','ressurreição','túmulo vazio','ressuscitado','vivo','esperança']
+FROM coloring_pages WHERE slug = 'easter-resurrection-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'pt',
+  'Jonas e o grande peixe',
+  '"O Senhor preparou um grande peixe para engolir Jonas; e Jonas ficou no ventre do peixe três dias e três noites." — Jonas 1:17',
+  'Deus chamou Jonas, mas Jonas fugiu. Deus ainda o salvou do grande peixe. Pinte Jonas dentro da baleia!',
+  ARRAY['jonas','baleia','peixe','oração','três dias','obediência']
+FROM coloring_pages WHERE slug = 'jonah-whale-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'pt',
+  'O Bom Samaritano',
+  '"Qual dos três você acha que foi o próximo do homem que caiu nas mãos dos salteadores?" — Lucas 10:36',
+  'Jesus nos ensinou a amar o próximo. O samaritano mostrou bondade quando os outros passaram sem parar.',
+  ARRAY['samaritano','próximo','bondade','parábola','ajuda','amor','compaixão']
+FROM coloring_pages WHERE slug = 'good-samaritan-01';
+
+-- ============================================================
+-- TRANSLATIONS — Arabic (ar)
+-- ============================================================
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ar',
+  'نوح والفلك',
+  '"كَانَ نُوحٌ رَجُلاً بَارًّا كَامِلاً فِي أَجْيَالِهِ. سَلَكَ نُوحٌ مَعَ اللهِ." — تكوين 6:9',
+  'آمن نوح بالله وبنى الفلك كما أمره الله. لوّن الحيوانات وهي تدخل اثنين اثنين!',
+  ARRAY['نوح','فلك','طوفان','طاعة','حيوانات','قوس قزح']
+FROM coloring_pages WHERE slug = 'noah-ark-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ar',
+  'داود وجليات',
+  '"قَالَ دَاوُدُ لِلْفِلِسْطِيِّ: أَنْتَ تَأْتِي إِلَيَّ بِسَيْفٍ... وَأَنَا آتِي إِلَيْكَ بِاسْمِ الرَّبِّ." — صموئيل الأول 17:45',
+  'بمقلاع وخمسة أحجار فقط، ثقَ داود بالله وهزم العملاق جليات!',
+  ARRAY['داود','جليات','شجاعة','عملاق','إيمان','نصر']
+FROM coloring_pages WHERE slug = 'david-goliath-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ar',
+  'يسوع يحب الأطفال',
+  '"دَعُوا الأَوْلاَدَ يَأْتُونَ إِلَيَّ وَلاَ تَنْهَوْهُمْ، لأَنَّ لِمِثْلِ هَؤُلاَءِ مَلَكُوتَ السَّمَاوَاتِ." — متى 19:14',
+  'رحّب يسوع بكل طفل بذراعين مفتوحتين. أنت محبوب من يسوع!',
+  ARRAY['يسوع','محبة','أطفال','بركة','ملكوت','ترحيب']
+FROM coloring_pages WHERE slug = 'jesus-loves-me-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ar',
+  'القيامة',
+  '"لَيْسَ هُوَ هَهُنَا، بَلْ قَامَ!" — لوقا 24:6',
+  'في صباح أحد الفصح، قام يسوع من الأموات! كان القبر فارغاً لأن يسوع حي!',
+  ARRAY['فصح','قيامة','قبر فارغ','قام','حياة','رجاء']
+FROM coloring_pages WHERE slug = 'easter-resurrection-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ar',
+  'يونان والحوت الكبير',
+  '"أَعَدَّ الرَّبُّ حُوتاً عَظِيماً لِيَبْتَلِعَ يُونَانَ، فَكَانَ يُونَانُ فِي بَطْنِ الْحُوتِ ثَلاَثَةَ أَيَّامٍ وَثَلاَثَ لَيَالٍ." — يونان 1:17',
+  'دعا الله يونان لكنه فرّ. ومع ذلك أنقذه الله من الحوت الكبير. لوّن يونان داخل الحوت!',
+  ARRAY['يونان','حوت','سمكة','صلاة','ثلاثة أيام','طاعة']
+FROM coloring_pages WHERE slug = 'jonah-whale-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ar',
+  'السامري الصالح',
+  '"فَأَيُّ هَؤُلاَءِ الثَّلاَثَةِ تَرَى صَارَ قَرِيباً لِلَّذِي وَقَعَ بَيْنَ اللُّصُوصِ؟" — لوقا 10:36',
+  'علّمنا يسوع أن نحب قريبنا. أظهر السامري اللطف حين مرّ الآخرون دون توقف.',
+  ARRAY['سامري','قريب','لطف','مثل','مساعدة','محبة','شفقة']
+FROM coloring_pages WHERE slug = 'good-samaritan-01';
+
+-- ============================================================
+-- TRANSLATIONS — Pashto (ps)
+-- ============================================================
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ps',
+  'نوح او کښتۍ',
+  '"نوح یو نیک او بې عیبه سړی و چې د خپل وخت خلکو کې یې د خدای سره ژوند کاوه." — پیدایښت 6:9',
+  'نوح پر خدای باور وکړ او هغه ته ډډه جوړه کړه. حیوانات چې دوه دوه ننوځي رنګ کړئ!',
+  ARRAY['نوح','کښتۍ','توفان','اطاعت','حیوانات']
+FROM coloring_pages WHERE slug = 'noah-ark-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ps',
+  'داؤد او جالوت',
+  '"داؤد د فلسطیني سره وویل: ته راته د توره او نیزې سره راځې... خو زه د رب پر نامه راځم." — د سموئیل لومړی کتاب 17:45',
+  'یوازې د ډبرو د ویشتلو آلې او پنځو ډبرو سره، داؤد پر خدای باور وکړ او پریو جالوت ته ماته ورکړه!',
+  ARRAY['داؤد','جالوت','زړه ورتیا','ایمان','بریا']
+FROM coloring_pages WHERE slug = 'david-goliath-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ps',
+  'عیسی ماشومان خوښوي',
+  '"ماشومان پرېږدئ چې راشي او دوی مه منع کوئ، ځکه د آسمان پاچاهي د داسې کسانو ده." — متی 19:14',
+  'عیسی هر ماشوم ته خلاص لاسونه ورکول. ته د عیسی لخوا محبوب یې!',
+  ARRAY['عیسی','مینه','ماشومان','برکت','آسمان']
+FROM coloring_pages WHERE slug = 'jesus-loves-me-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ps',
+  'د قیامت ورځ',
+  '"هغه دلته نه دی؛ هغه راپورته شوی!" — لوقا 24:6',
+  'د عید د سهار پر وخت، عیسی د مړو څخه راپورته شو! قبر خالي و ځکه عیسی ژوندی دی!',
+  ARRAY['عید','قیامت','خالي قبر','راپورته شوی','هیله']
+FROM coloring_pages WHERE slug = 'easter-resurrection-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ps',
+  'یونس او لوی کب',
+  '"رب یو لوی کب چمتو کړ چې یونس ووالي، یونس درې ورځې او درې شپې د کب پر ګیډه کې پاتې شو." — یونس 1:17',
+  'خدای یونس ته غږ وکړ خو یونس وتښتید. خدای بیا هم هغه د لوی کب نه وژغوراوه. یونس د کب دننه رنګ کړئ!',
+  ARRAY['یونس','کب','لمانځه','درې ورځې','اطاعت']
+FROM coloring_pages WHERE slug = 'jonah-whale-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'ps',
+  'نیک سامري',
+  '"ستاسو له نظره د دغو درو کسانو کوم یو د هغه سړي ګاونډی و چې غلو ته ورپاتې شو؟" — لوقا 10:36',
+  'عیسی موږ ته زده کړه چې خپل ګاونډي وپیژنو. سامري هغه وخت مهرباني وښوده چې نور تللي.',
+  ARRAY['سامري','ګاونډی','مهرباني','مثل','مرسته','مینه']
+FROM coloring_pages WHERE slug = 'good-samaritan-01';
+
+-- ============================================================
+-- TRANSLATIONS — Amharic (am)
+-- ============================================================
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'am',
+  'ኖኅ እና መርከቡ',
+  '"ኖኅ ጻድቅ ሰው ነበር፤ በዘመኑ ካሉ ሰዎች ሁሉ ንጹሕ ሆኖ ከእግዚአብሔር ጋር ሄደ።" — ዘፍጥረት 6:9',
+  'ኖኅ እግዚአብሔርን አመነ እና እንዳዘዘው መርከብ ሠራ። እንስሳቱ ሁለት ሁለት ሲገቡ ቀለም ቀቡ!',
+  ARRAY['ኖኅ','መርከብ','ጎርፍ','መታዘዝ','እንስሳ','ቀስተ ደመና']
+FROM coloring_pages WHERE slug = 'noah-ark-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'am',
+  'ዳዊት እና ጎልያት',
+  '"ዳዊት ለፍልስጤማዊው አለ፦ አንተ በሰይፍ ትመጣብኛለህ... እኔ ግን በጌታ ስም እመጣብሃለሁ።" — 1ሳሙኤል 17:45',
+  'ዳዊት ቀፋትና አምስት ድንጋዮች ብቻ ይዞ እግዚአብሔርን አምኖ ጎልያትን ድል አደረገ!',
+  ARRAY['ዳዊት','ጎልያት','ድፍረት','ፈሪሃ','ድል']
+FROM coloring_pages WHERE slug = 'david-goliath-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'am',
+  'ኢየሱስ ሕፃናትን ይወዳል',
+  '"ሕፃናቱ ወደ እኔ እንዲመጡ ፍቀዱ፤ አትከልክሏቸው፤ የሰማይ መንግሥት እንደነዚህ ያሉ ናቸው።" — ማቴዎስ 19:14',
+  'ኢየሱስ እያንዳንዱን ሕፃን ክፍት ክንዶቹ አቅፎ ተቀበለ። ኢየሱስ ይወድሃል!',
+  ARRAY['ኢየሱስ','ፍቅር','ሕፃናት','በረከት','መንግሥተ ሰማያት']
+FROM coloring_pages WHERE slug = 'jesus-loves-me-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'am',
+  'ትንሣኤ',
+  '"እርሱ እዚህ የለም፤ ተነሥቷልና!" — ሉቃስ 24:6',
+  'በትንሣኤ ቀን ማለዳ ኢየሱስ ከሙታን ተነሣ! መቃብሩ ባዶ ሆነ ምክንያቱም ኢየሱስ ሕያው ነው!',
+  ARRAY['ትንሣኤ','ባዶ መቃብር','ተነሥቷል','ሕያው','ተስፋ']
+FROM coloring_pages WHERE slug = 'easter-resurrection-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'am',
+  'ዮናስ እና ትልቁ ዓሣ',
+  '"ጌታ ዮናስን ሊውጠው ትልቅ ዓሣ አዘጋጀ፤ ዮናስም ሦስት ቀንና ሦስት ሌሊት በዓሣው ሆድ ውስጥ ቆየ።" — ዮናስ 1:17',
+  'እግዚአብሔር ዮናስን ጠራ ነገር ግን ዮናስ ሸሸ። እግዚአብሔር ሆኖም ከትልቁ ዓሣ አዳነው። ዮናስን በዓሣ ሆድ ቀለም ቀቡ!',
+  ARRAY['ዮናስ','ዓሣ','ጸሎት','ሦስት ቀን','መታዘዝ']
+FROM coloring_pages WHERE slug = 'jonah-whale-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'am',
+  'ደጉ ሳምራዊ',
+  '"ከሦስቱ ውስጥ በወንበዴዎች እጅ ለወደቀው ሰው ጎረቤቱ የሆነ ማን ይመስልሃል?" — ሉቃስ 10:36',
+  'ኢየሱስ ጎረቤታችንን እንዋደድ ብሎ አስተማረን። ሌሎች አልፈው ሲሄዱ ሳምራዊው ደግነቱን አሳየ።',
+  ARRAY['ሳምራዊ','ጎረቤት','ደግነት','ምሳሌ','እርዳታ','ፍቅር']
+FROM coloring_pages WHERE slug = 'good-samaritan-01';
+
+-- ============================================================
+-- TRANSLATIONS — Mongolian (mn)
+-- ============================================================
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'mn',
+  'Ноа ба хөлөг онгоц',
+  '"Ноа бол шударга хүн байсан бөгөөд тухайн үеийн хүмүүсийн дундаас гэм зэмгүй байсан. Ноа Бурхантай хамт явдаг байв." — Эхлэл 6:9',
+  'Ноа Бурханд итгэж, Бурханы тушаасанчлан хөлөг онгоцыг барилаа. Амьтдыг хоёр хоёроор нь ороход буд!',
+  ARRAY['Ноа','хөлөг онгоц','үер','дуулгавар','амьтад','солонго']
+FROM coloring_pages WHERE slug = 'noah-ark-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'mn',
+  'Давид ба Голиат',
+  '"Давид Филистийнхэнд хэлэв: Чи илд, жад авчирдаг... Гэвч би Эзэний нэрээр очиж байна." — 1 Самуил 17:45',
+  'Зөвхөн чулуу шидэгч болон таван чулуугаар Давид Бурханд итгэж, аварга том Голиатыг ялав!',
+  ARRAY['Давид','Голиат','зориг','итгэл','ялалт']
+FROM coloring_pages WHERE slug = 'david-goliath-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'mn',
+  'Есүс хүүхдүүдийг хайрладаг',
+  '"Хүүхдүүдийг Надад ирэхийг зөвшөөр, тэднийг бүү хориглогтун. Тэнгэрийн хаанчлал ийм хүмүүст хамаарна." — Матай 19:14',
+  'Есүс хүүхэд бүрийг нээлттэй гараар угтав. Есүс чамайг хайрладаг!',
+  ARRAY['Есүс','хайр','хүүхдүүд','ерөөл','тэнгэрийн хаанчлал']
+FROM coloring_pages WHERE slug = 'jesus-loves-me-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'mn',
+  'Амилалт',
+  '"Тэр энд байхгүй; амилсан!" — Лук 24:6',
+  'Амилалтын өглөө Есүс үхлээс амилав! Булш хоосон байв, учир нь Есүс амьд байна!',
+  ARRAY['амилалт','хоосон булш','амилсан','амьд','найдвар']
+FROM coloring_pages WHERE slug = 'easter-resurrection-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'mn',
+  'Иона ба том загас',
+  '"Эзэн Ионаг залгихаар том загас бэлдэв; Иона гурван өдөр, гурван шөнө загасны хэвлийд байв." — Иона 1:17',
+  'Бурхан Ионаг дуудсан ч Иона зугтсан. Гэсэн хэдий ч Бурхан түүнийг том загаснаас авраав. Загасны хэвлий дэх Ионаг буд!',
+  ARRAY['Иона','загас','залбирал','гурван өдөр','дуулгавар']
+FROM coloring_pages WHERE slug = 'jonah-whale-01';
+
+INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
+SELECT id, 'mn',
+  'Сайн Самаричин',
+  '"Дээрэмчдийн гарт унасан хүний хөршийн хувьд эдгээр гурваас аль нь байсан гэж чи бодов?" — Лук 10:36',
+  'Есүс хөршөө хайрлахыг биднийг заасан. Бусад нь өнгөрч явахад Самаричин өршөөл үзүүлэв.',
+  ARRAY['Самаричин','хөрш','өршөөл','сургаалт зүйр','тусламж','хайр']
+FROM coloring_pages WHERE slug = 'good-samaritan-01';
+
+-- ============================================================
 -- POPULAR SEARCHES (for homepage chips)
 -- ============================================================
 

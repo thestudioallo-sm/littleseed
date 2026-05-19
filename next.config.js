@@ -36,10 +36,6 @@ const nextConfig = {
     },
   ],
 
-  experimental: {
-    // Keep bundle lean
-    optimizePackageImports: ['@supabase/supabase-js'],
-  },
 };
 
 module.exports = nextConfig;

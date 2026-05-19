@@ -6,7 +6,7 @@ import { getSheetBySlug } from '@/lib/search';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { PrintButton }      from '@/components/PrintButton';
 import type { LanguageCode } from '@/lib/types';
-import { AGE_GROUP_LABELS, DIFFICULTY_LABELS } from '@/lib/types';
+import { AGE_GROUP_LABELS, DIFFICULTY_LABELS, SUPPORTED_LANGUAGES } from '@/lib/types';
 
 interface SheetPageProps {
   params:       { slug: string };
@@ -46,9 +46,8 @@ export default async function SheetPage({ params, searchParams }: SheetPageProps
   const title           = t?.title ?? sheet.bible_story;
   const verse           = t?.verse ?? '';
   const description     = t?.description ?? '';
-  const availableLangs  = sheet.all_translations.map(
-    (tr) => tr.language_code as LanguageCode
-  );
+  // Always show all 9 languages; fall back to English if no translation exists
+  const availableLangs = SUPPORTED_LANGUAGES.map(l => l.code as LanguageCode);
 
   return (
     <>
@@ -139,17 +138,15 @@ export default async function SheetPage({ params, searchParams }: SheetPageProps
               </span>
             </div>
 
-            {/* Language selector */}
-            {availableLangs.length > 1 && (
-              <div>
-                <Suspense>
-                  <LanguageSelector
-                    currentLang={lang}
-                    availableLangs={availableLangs}
-                  />
-                </Suspense>
-              </div>
-            )}
+            {/* Language selector — always show all 9 languages */}
+            <div>
+              <Suspense>
+                <LanguageSelector
+                  currentLang={lang}
+                  availableLangs={availableLangs}
+                />
+              </Suspense>
+            </div>
 
             {/* Action buttons */}
             <div className="flex flex-col gap-2 mt-2">
