@@ -4,13 +4,6 @@ import { toSlug } from '@/lib/utils';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-/**
- * POST /api/upload
- *
- * Accepts a multipart payload (file + metadata) and either persists to
- * Supabase or returns a mock acknowledgement with a precise diagnostic
- * hint about which env var is missing.
- */
 export async function POST(req: NextRequest) {
   let form: FormData;
   try {
@@ -54,79 +47,89 @@ export async function POST(req: NextRequest) {
 
   const slug = `${toSlug(title)}-${Date.now().toString(36).slice(-5)}`;
 
-  // Inspect each piece of Supabase config separately so we can return
-  // a precise diagnostic to the user instead of a vague "not configured".
   const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL        ?? '';
   const anon         = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY   ?? '';
   const serviceKey   = process.env.SUPABASE_SERVICE_ROLE_KEY       ?? '';
-
   const urlOk        = !!supabaseUrl && !supabaseUrl.includes('placeholder');
   const anonOk       = !!anon        && !anon.includes('placeholder');
   const serviceOk    = !!serviceKey  && !serviceKey.includes('placeholder');
-
-  const isMock = !(urlOk && anonOk && serviceOk);
+  const isMock       = !(urlOk && anonOk && serviceOk);
 
   if (isMock) {
     return NextResponse.json({
-      ok:              true,
-      mocked:          true,
-      slug,
+      ok: true, mocked: true, slug,
       reason: {
-        url_present:     !!supabaseUrl,
-        url_is_real:     urlOk,
-        url_host:        urlOk ? new URL(supabaseUrl).host : (supabaseUrl || '(empty)'),
-        anon_present:    !!anon,
-        anon_is_real:    anonOk,
-        service_present: !!serviceKey,
-        service_is_real: serviceOk,
+        url_present: !!supabaseUrl, url_is_real: urlOk,
+        url_host: urlOk ? new URL(supabaseUrl).host : (supabaseUrl || '(empty)'),
+        anon_present: !!anon, anon_is_real: anonOk,
+        service_present: !!serviceKey, service_is_real: serviceOk,
       },
       hint:
-        !urlOk     ? 'NEXT_PUBLIC_SUPABASE_URL is missing or still a placeholder on the server. Check Vercel -> Settings -> Environment Variables, make sure Production is ticked, then redeploy.' :
-        !anonOk    ? 'NEXT_PUBLIC_SUPABASE_ANON_KEY is missing or placeholder. Re-add it for the Production scope and redeploy.' :
-        !serviceOk ? 'SUPABASE_SERVICE_ROLE_KEY is missing on the server. Uploads need it to write storage. Add it (Production scope) and redeploy.' :
+        !urlOk     ? 'NEXT_PUBLIC_SUPABASE_URL is missing or still a placeholder on the server.' :
+        !anonOk    ? 'NEXT_PUBLIC_SUPABASE_ANON_KEY is missing or placeholder.' :
+        !serviceOk ? 'SUPABASE_SERVICE_ROLE_KEY is missing on the server.' :
                      'Supabase config looks ok but something else blocked the upload.',
       title, reference, verse, description, tags,
       age_group: ageGroup, difficulty, svg_bytes: svgText.length,
     });
   }
 
-  // ── Real Supabase path ─────────────────────────────────────────
   const { getSupabaseAdmin } = await import('@/lib/supabase');
   const supa = getSupabaseAdmin();
 
   const path = `user-uploads/${slug}.svg`;
   const { error: upErr } = await supa
-    .storage
-    .from('coloring')
+    .storage.from('coloring')
     .upload(path, svgText, { contentType: 'image/svg+xml', upsert: false });
   if (upErr) {
-    return NextResponse.json({ error: 'Storage upload failed', detail: upErr.message }, { status: 500 });
+    return NextResponse.json({
+      error: 'Storage upload failed',
+      detail: upErr.message,
+      hint: 'Check that the "coloring" bucket exists and that the service_role key is correct.',
+    }, { status: 500 });
   }
 
   const publicUrl = supa.storage.from('coloring').getPublicUrl(path).data.publicUrl;
 
+  const insertPayload = {
+    slug,
+    bible_story:   title,
+    bible_book:    reference ? reference.split(/\s+\d/)[0] : null,
+    bible_verse:   reference || null,
+    age_group:     ageGroup,
+    difficulty,
+    svg_url:       publicUrl,
+    thumbnail_url: publicUrl,
+    tags,
+    is_published:  true,
+  };
+
   const { data: page, error: pageErr } = await supa
     .from('coloring_pages')
-    .insert({
-      slug,
-      bible_story:   title,
-      bible_book:    reference ? reference.split(/\s+\d/)[0] : null,
-      bible_verse:   reference || null,
-      age_group:     ageGroup,
-      difficulty,
-      svg_url:       publicUrl,
-      thumbnail_url: publicUrl,
-      tags,
-      is_published:  true,
-    })
+    .insert(insertPayload)
     .select('id, slug')
     .single();
 
   if (pageErr || !page) {
-    return NextResponse.json({ error: 'DB insert failed', detail: pageErr?.message }, { status: 500 });
+    return NextResponse.json({
+      error:  'DB insert failed',
+      detail: pageErr?.message ?? 'unknown',
+      code:   (pageErr as any)?.code ?? null,
+      hint:   (pageErr as any)?.hint ?? null,
+      payload_sent: {
+        slug,
+        bible_story:  title,
+        bible_book:   insertPayload.bible_book,
+        bible_verse:  insertPayload.bible_verse,
+        age_group:    ageGroup,
+        difficulty,
+        tags_count:   tags.length,
+        is_published: true,
+      },
+    }, { status: 500 });
   }
 
-  await supa.from('translations').insert({
+  const { error: trErr } = await supa.from('translations').insert({
     coloring_page_id: page.id,
     language_code:    'en',
     title,
@@ -134,6 +137,14 @@ export async function POST(req: NextRequest) {
     description:      description || null,
     keywords:         tags,
   });
+
+  if (trErr) {
+    return NextResponse.json({
+      ok: true, slug: page.slug,
+      warning: 'Sheet saved but English translation row failed to insert.',
+      detail:  trErr.message,
+    });
+  }
 
   return NextResponse.json({ ok: true, slug: page.slug });
 }
