@@ -8,6 +8,18 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "unaccent";   -- accent-insensitive search
 
 -- ============================================================
+-- Default privileges
+-- Required because DROP SCHEMA public; CREATE SCHEMA public; loses
+-- the Supabase auto-grants for anon / authenticated / service_role.
+-- ============================================================
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT                          ON TABLES    TO anon;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE  ON TABLES    TO authenticated;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL                             ON TABLES    TO service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE                           ON SEQUENCES TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT EXECUTE                         ON FUNCTIONS TO anon, authenticated, service_role;
+
+-- ============================================================
 -- ENUM TYPES
 -- ============================================================
 
@@ -985,3 +997,18 @@ BEGIN
   RETURN QUERY SELECT (NOT v_saved);
 END;
 $$;
+
+
+-- ============================================================
+-- Final grants on the objects created above (the ALTER DEFAULT
+-- PRIVILEGES above only affects FUTURE objects, not the ones we
+-- just created in this script).
+-- ============================================================
+
+GRANT SELECT                         ON ALL TABLES    IN SCHEMA public TO anon;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES    IN SCHEMA public TO authenticated;
+GRANT ALL                            ON ALL TABLES    IN SCHEMA public TO service_role;
+GRANT USAGE                          ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
+GRANT EXECUTE                        ON ALL FUNCTIONS IN SCHEMA public TO anon, authenticated, service_role;
+
+NOTIFY pgrst, 'reload schema';
