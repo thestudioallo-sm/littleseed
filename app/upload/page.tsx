@@ -140,6 +140,8 @@ export default function UploadPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? 'Publish failed');
       setPublished({ slug: data.slug, mocked: Boolean(data.mocked) });
+      // Surface the diagnostic hint so the user can fix Supabase config.
+      if (data.mocked && data.hint) setError(`⚠ ${data.hint}`);
     } catch (err: any) {
       setError(err?.message ?? 'Publish failed.');
     } finally {
@@ -147,7 +149,7 @@ export default function UploadPage() {
     }
   }
 
-  // ── Preview URL (revoked between renders) ───────────────────────
+  // ── Preview URL ─────────────────────────────────────────────────
   const previewSrc = useMemo(() => {
     if (!result) return '';
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(result.svg);
@@ -177,9 +179,7 @@ export default function UploadPage() {
           <label
             ref={dropRef}
             htmlFor="upload-file"
-            className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer
-                        transition-colors ${dragging ? 'border-blue-500 bg-blue-50'
-                                                     : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'}`}
+            className={`block border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${dragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'}`}
             style={{ minHeight: 180 }}
           >
             <input
@@ -238,9 +238,7 @@ export default function UploadPage() {
         <aside className="flex flex-col gap-4">
 
           <fieldset className="flex flex-col gap-3">
-            <legend className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
-              Post details
-            </legend>
+            <legend className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">Post details</legend>
 
             <label className="block">
               <span className="block text-sm font-medium text-gray-700 mb-1">Title *</span>
@@ -250,23 +248,19 @@ export default function UploadPage() {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Noah and the Ark"
                 maxLength={120}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm
-                           focus:border-blue-500 focus:outline-none"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
                 style={{ minHeight: 44 }}
               />
             </label>
 
             <label className="block">
-              <span className="block text-sm font-medium text-gray-700 mb-1">
-                Bible reference
-              </span>
+              <span className="block text-sm font-medium text-gray-700 mb-1">Bible reference</span>
               <input
                 type="text"
                 value={reference}
                 onChange={(e) => setReference(e.target.value)}
                 placeholder="Genesis 6:9"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm
-                           focus:border-blue-500 focus:outline-none"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
                 style={{ minHeight: 44 }}
               />
             </label>
@@ -276,38 +270,31 @@ export default function UploadPage() {
               <textarea
                 value={verse}
                 onChange={(e) => setVerse(e.target.value)}
-                placeholder='"Noah was a righteous man, blameless among the people…"'
+                placeholder='"Noah was a righteous man, blameless among the people..."'
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm
-                           focus:border-blue-500 focus:outline-none resize-y"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none resize-y"
               />
             </label>
 
             <label className="block">
-              <span className="block text-sm font-medium text-gray-700 mb-1">
-                Description / activity note
-              </span>
+              <span className="block text-sm font-medium text-gray-700 mb-1">Description / activity note</span>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Color the animals going two by two!"
                 rows={2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm
-                           focus:border-blue-500 focus:outline-none resize-y"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none resize-y"
               />
             </label>
 
             <label className="block">
-              <span className="block text-sm font-medium text-gray-700 mb-1">
-                Tags (comma-separated)
-              </span>
+              <span className="block text-sm font-medium text-gray-700 mb-1">Tags (comma-separated)</span>
               <input
                 type="text"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
                 placeholder="noah, ark, animals"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm
-                           focus:border-blue-500 focus:outline-none"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
                 style={{ minHeight: 44 }}
               />
             </label>
@@ -318,8 +305,7 @@ export default function UploadPage() {
                 <select
                   value={ageGroup}
                   onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
-                  className="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm
-                             focus:border-blue-500 focus:outline-none"
+                  className="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
                   style={{ minHeight: 40 }}
                 >
                   {Object.entries(AGE_GROUP_LABELS).map(([v, l]) => (
@@ -332,8 +318,7 @@ export default function UploadPage() {
                 <select
                   value={difficulty}
                   onChange={(e) => setDifficulty(e.target.value as Difficulty)}
-                  className="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm
-                             focus:border-blue-500 focus:outline-none"
+                  className="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
                   style={{ minHeight: 40 }}
                 >
                   {Object.entries(DIFFICULTY_LABELS).map(([v, l]) => (
@@ -345,18 +330,14 @@ export default function UploadPage() {
           </fieldset>
 
           <fieldset className="flex flex-col gap-3 border-t border-gray-100 pt-4">
-            <legend className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
-              Line extraction
-            </legend>
+            <legend className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">Line extraction</legend>
             <div className="grid grid-cols-3 gap-1.5">
               {(['outline', 'bw', 'grayscale'] as ConvertMode[]).map((m) => (
                 <button
                   key={m}
                   type="button"
                   onClick={() => setMode(m)}
-                  className={`px-2 py-1.5 text-xs font-medium rounded border
-                              ${mode === m ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                           : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
+                  className={`px-2 py-1.5 text-xs font-medium rounded border ${mode === m ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
                   style={{ minHeight: 40 }}
                 >
                   {m === 'outline' ? 'Lines' : m === 'bw' ? 'B&W' : 'Grey'}
@@ -364,9 +345,7 @@ export default function UploadPage() {
               ))}
             </div>
             <label className="block">
-              <span className="block text-xs text-gray-500 mb-1">
-                Sensitivity: {threshold}
-              </span>
+              <span className="block text-xs text-gray-500 mb-1">Sensitivity: {threshold}</span>
               <input
                 type="range"
                 min={60}
@@ -383,9 +362,8 @@ export default function UploadPage() {
             </p>
           </fieldset>
 
-          {/* Errors / status */}
           {error && (
-            <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3">
+            <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3 whitespace-pre-wrap">
               {error}
             </div>
           )}
@@ -396,22 +374,16 @@ export default function UploadPage() {
                   : 'Published. View at '}
               {published.mocked
                 ? <code className="text-xs">{published.slug}</code>
-                : <Link className="underline font-medium" href={`/sheet/${published.slug}`}>
-                    /sheet/{published.slug}
-                  </Link>}
+                : <Link className="underline font-medium" href={`/sheet/${published.slug}`}>/sheet/{published.slug}</Link>}
             </div>
           )}
 
-          {/* Actions */}
           <div className="flex flex-col gap-2 border-t border-gray-100 pt-4">
             <button
               type="button"
               onClick={handleConvert}
               disabled={!file || busy}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg
-                         bg-blue-600 text-white font-semibold text-sm
-                         hover:bg-blue-700 active:bg-blue-800
-                         disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ minHeight: 52 }}
             >
               {busy ? 'Working…' : '🎨 Convert to SVG'}
@@ -421,9 +393,7 @@ export default function UploadPage() {
               type="button"
               onClick={handleDownload}
               disabled={!result}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg
-                         border border-gray-300 text-gray-700 font-semibold text-sm
-                         hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ minHeight: 48 }}
             >
               ⬇ Download SVG
@@ -433,9 +403,7 @@ export default function UploadPage() {
               type="button"
               onClick={handlePublish}
               disabled={!result || busy}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg
-                         border border-green-600 text-green-700 font-semibold text-sm
-                         hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-green-600 text-green-700 font-semibold text-sm hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ minHeight: 48 }}
             >
               🌐 Publish to gallery

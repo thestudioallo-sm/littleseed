@@ -7,25 +7,15 @@ export const runtime = 'nodejs';
 /**
  * POST /api/upload
  *
- * Accepts a multipart payload containing:
- *   - file       : the produced SVG (Blob) — generated client-side
- *   - title      : sheet title
- *   - reference  : "Genesis 6:9" or similar
- *   - verse      : full verse text
- *   - description: teacher / activity note
- *   - tags       : comma-separated keywords
- *
- * Validates inputs, generates a slug, and (when Supabase is properly
- * configured) inserts a `coloring_pages` row plus a single English
- * translation. In mock mode (placeholder Supabase URL) it returns the
- * accepted payload so the UI can confirm a successful conversion
- * without hitting the database.
+ * Accepts a multipart payload (file + metadata) and either persists to
+ * Supabase or returns a mock acknowledgement with a precise diagnostic
+ * hint about which env var is missing.
  */
 export async function POST(req: NextRequest) {
   let form: FormData;
   try {
     form = await req.formData();
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: 'Invalid multipart body' }, { status: 400 });
   }
 
@@ -51,7 +41,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'SVG too large (max 5 MB)' }, { status: 413 });
   }
 
-  // Validate the file really is an SVG to prevent abuse
   const svgText = await file.text();
   if (!svgText.includes('<svg')) {
     return NextResponse.json({ error: 'Payload is not a valid SVG' }, { status: 400 });
@@ -65,34 +54,46 @@ export async function POST(req: NextRequest) {
 
   const slug = `${toSlug(title)}-${Date.now().toString(36).slice(-5)}`;
 
-  const isMock =
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+  // Inspect each piece of Supabase config separately so we can return
+  // a precise diagnostic to the user instead of a vague "not configured".
+  const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL        ?? '';
+  const anon         = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY   ?? '';
+  const serviceKey   = process.env.SUPABASE_SERVICE_ROLE_KEY       ?? '';
+
+  const urlOk        = !!supabaseUrl && !supabaseUrl.includes('placeholder');
+  const anonOk       = !!anon        && !anon.includes('placeholder');
+  const serviceOk    = !!serviceKey  && !serviceKey.includes('placeholder');
+
+  const isMock = !(urlOk && anonOk && serviceOk);
 
   if (isMock) {
-    // No persistence path — the client already has the SVG locally.
     return NextResponse.json({
-      ok:           true,
-      mocked:       true,
+      ok:              true,
+      mocked:          true,
       slug,
-      title,
-      reference,
-      verse,
-      description,
-      tags,
-      age_group:    ageGroup,
-      difficulty,
-      svg_bytes:    svgText.length,
+      reason: {
+        url_present:     !!supabaseUrl,
+        url_is_real:     urlOk,
+        url_host:        urlOk ? new URL(supabaseUrl).host : (supabaseUrl || '(empty)'),
+        anon_present:    !!anon,
+        anon_is_real:    anonOk,
+        service_present: !!serviceKey,
+        service_is_real: serviceOk,
+      },
+      hint:
+        !urlOk     ? 'NEXT_PUBLIC_SUPABASE_URL is missing or still a placeholder on the server. Check Vercel -> Settings -> Environment Variables, make sure Production is ticked, then redeploy.' :
+        !anonOk    ? 'NEXT_PUBLIC_SUPABASE_ANON_KEY is missing or placeholder. Re-add it for the Production scope and redeploy.' :
+        !serviceOk ? 'SUPABASE_SERVICE_ROLE_KEY is missing on the server. Uploads need it to write storage. Add it (Production scope) and redeploy.' :
+                     'Supabase config looks ok but something else blocked the upload.',
+      title, reference, verse, description, tags,
+      age_group: ageGroup, difficulty, svg_bytes: svgText.length,
     });
   }
 
   // ── Real Supabase path ─────────────────────────────────────────
-  // Lazy-import so build-time bundling does not pull the SDK if the
-  // env vars are missing.
   const { getSupabaseAdmin } = await import('@/lib/supabase');
   const supa = getSupabaseAdmin();
 
-  // 1. Upload the SVG to the `coloring` bucket
   const path = `user-uploads/${slug}.svg`;
   const { error: upErr } = await supa
     .storage
@@ -104,7 +105,6 @@ export async function POST(req: NextRequest) {
 
   const publicUrl = supa.storage.from('coloring').getPublicUrl(path).data.publicUrl;
 
-  // 2. Insert coloring_pages row
   const { data: page, error: pageErr } = await supa
     .from('coloring_pages')
     .insert({
@@ -126,7 +126,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'DB insert failed', detail: pageErr?.message }, { status: 500 });
   }
 
-  // 3. Insert default English translation
   await supa.from('translations').insert({
     coloring_page_id: page.id,
     language_code:    'en',
