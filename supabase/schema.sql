@@ -72,13 +72,7 @@ CREATE TABLE coloring_pages (
   created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
-  -- Full-text search vector (English default; per-row boosted)
-  search_vector  TSVECTOR GENERATED ALWAYS AS (
-    setweight(to_tsvector('english', coalesce(bible_story, '')), 'A') ||
-    setweight(to_tsvector('english', coalesce(bible_book, '')),  'B') ||
-    setweight(to_tsvector('english', coalesce(array_to_string(tags, ' '), '')), 'B') ||
-    setweight(to_tsvector('english', coalesce(bible_verse, '')), 'C')
-  ) STORED
+  search_vector  TSVECTOR
 );
 
 -- GIN index for fast full-text search
@@ -102,6 +96,16 @@ CREATE TRIGGER trg_coloring_pages_updated_at
 -- TABLE: translations
 -- ============================================================
 
+-- Immutable wrapper around unaccent() so it can be used in
+-- GENERATED ALWAYS AS ... STORED columns (which require IMMUTABLE).
+CREATE OR REPLACE FUNCTION public.f_unaccent(text)
+  RETURNS text
+  LANGUAGE sql
+  IMMUTABLE
+  PARALLEL SAFE
+  STRICT
+AS $$ SELECT public.unaccent('public.unaccent'::regdictionary, $1) $$;
+
 CREATE TABLE translations (
   id               UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   coloring_page_id UUID NOT NULL REFERENCES coloring_pages(id) ON DELETE CASCADE,
@@ -111,16 +115,48 @@ CREATE TABLE translations (
   description      TEXT,                    -- short teacher note / activity description
   keywords         TEXT[] NOT NULL DEFAULT '{}',  -- localized search keywords
 
-  -- Per-translation search vector (multilingual)
-  search_vector    TSVECTOR GENERATED ALWAYS AS (
-    setweight(to_tsvector('simple', unaccent(coalesce(title, ''))),       'A') ||
-    setweight(to_tsvector('simple', unaccent(coalesce(verse, ''))),       'B') ||
-    setweight(to_tsvector('simple', unaccent(coalesce(description, ''))), 'C') ||
-    setweight(to_tsvector('simple', unaccent(array_to_string(keywords, ' '))), 'B')
-  ) STORED,
+  search_vector    TSVECTOR,
 
   UNIQUE (coloring_page_id, language_code)
 );
+
+-- ============================================================
+-- Triggers to populate search_vector columns
+-- (Used instead of GENERATED columns because IMMUTABLE constraints
+--  on tsvector + regconfig + unaccent get rejected by Postgres 15.)
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION coloring_pages_search_trigger()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+BEGIN
+  NEW.search_vector :=
+    setweight(to_tsvector('english'::regconfig, coalesce(NEW.bible_story, '')), 'A') ||
+    setweight(to_tsvector('english'::regconfig, coalesce(NEW.bible_book, '')),  'B') ||
+    setweight(to_tsvector('english'::regconfig, coalesce(array_to_string(NEW.tags, ' '), '')), 'B') ||
+    setweight(to_tsvector('english'::regconfig, coalesce(NEW.bible_verse, '')), 'C');
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_coloring_pages_search
+  BEFORE INSERT OR UPDATE ON coloring_pages
+  FOR EACH ROW EXECUTE FUNCTION coloring_pages_search_trigger();
+
+CREATE OR REPLACE FUNCTION translations_search_trigger()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+BEGIN
+  NEW.search_vector :=
+    setweight(to_tsvector('simple'::regconfig, f_unaccent(coalesce(NEW.title, ''))),       'A') ||
+    setweight(to_tsvector('simple'::regconfig, f_unaccent(coalesce(NEW.verse, ''))),       'B') ||
+    setweight(to_tsvector('simple'::regconfig, f_unaccent(coalesce(NEW.description, ''))), 'C') ||
+    setweight(to_tsvector('simple'::regconfig, f_unaccent(array_to_string(NEW.keywords, ' '))), 'B');
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_translations_search
+  BEFORE INSERT OR UPDATE ON translations
+  FOR EACH ROW EXECUTE FUNCTION translations_search_trigger();
 
 CREATE INDEX idx_translations_page_lang ON translations (coloring_page_id, language_code);
 CREATE INDEX idx_translations_search    ON translations USING GIN (search_vector);
@@ -165,7 +201,7 @@ RETURNS TABLE (
     t.verse,
     (
       ts_rank(cp.search_vector, websearch_to_tsquery('english', query_text)) * 1.5 +
-      ts_rank(t.search_vector,  websearch_to_tsquery('simple',  unaccent(query_text)))
+      ts_rank(t.search_vector,  websearch_to_tsquery('simple',  f_unaccent(query_text)))
     ) AS rank
   FROM coloring_pages cp
   LEFT JOIN translations t
@@ -175,7 +211,7 @@ RETURNS TABLE (
     AND (
       query_text IS NULL OR query_text = '' OR
       cp.search_vector @@ websearch_to_tsquery('english', query_text) OR
-      t.search_vector  @@ websearch_to_tsquery('simple',  unaccent(query_text))
+      t.search_vector  @@ websearch_to_tsquery('simple',  f_unaccent(query_text))
     )
     AND (p_age_group  IS NULL OR cp.age_group  = p_age_group)
     AND (p_difficulty IS NULL OR cp.difficulty = p_difficulty)
@@ -285,7 +321,7 @@ FROM coloring_pages WHERE slug = 'noah-ark-01';
 INSERT INTO translations (coloring_page_id, language_code, title, verse, description, keywords)
 SELECT id, 'en',
   'David and Goliath',
-  '"David said to the Philistine, ''You come against me with sword and spear… but I come against you in the name of the LORD.'''" — 1 Samuel 17:45',
+  $$"David said to the Philistine, 'You come against me with sword and spear… but I come against you in the name of the LORD.'" — 1 Samuel 17:45$$,
   'With just a sling and five smooth stones, David trusted God and defeated the giant Goliath!',
   ARRAY['david','goliath','courage','giant','faith','sling','victory']
 FROM coloring_pages WHERE slug = 'david-goliath-01';
