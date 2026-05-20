@@ -35,6 +35,13 @@ export function Header() {
             Browse
           </Link>
           <Link
+            href="/upload"
+            className="px-3 py-2 rounded text-sm font-medium text-blue-600 hover:bg-blue-50"
+            style={{ minHeight: 44, display: 'flex', alignItems: 'center' }}
+          >
+            Upload
+          </Link>
+          <Link
             href="/about"
             className="px-3 py-2 rounded text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
             style={{ minHeight: 44, display: 'flex', alignItems: 'center' }}

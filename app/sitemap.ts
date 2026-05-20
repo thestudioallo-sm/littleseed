@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { supabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://littleseed.app';
 
@@ -28,10 +28,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency:  'monthly',
       priority:         0.5,
     },
+    {
+      url:              `${BASE_URL}/upload`,
+      lastModified:     new Date(),
+      changeFrequency:  'monthly',
+      priority:         0.4,
+    },
   ];
 
   // Dynamic sheet routes
-  const { data: pages, error } = await supabase
+  const { data: pages, error } = await getSupabase()
     .from('coloring_pages')
     .select('slug, updated_at')
     .eq('is_published', true)
