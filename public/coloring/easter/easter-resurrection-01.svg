@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  LittleSeed — The Resurrection
+  Free Bible Coloring Sheet | littleseed.app
+  Bible reference: Luke 24:6
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="600" height="800" fill="#fff"/>
+
+  <!-- Title -->
+  <text x="300" y="60" text-anchor="middle" font-family="Georgia, serif" font-size="32" font-weight="bold" stroke="none" fill="#000">The Resurrection</text>
+  <text x="300" y="92" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-style="italic" stroke="none" fill="#333">"He is not here; he has risen!" — Luke 24:6</text>
+
+  <!-- Ground -->
+  <path d="M 40 700 Q 300 660 560 700"/>
+  <path d="M 60 720 Q 200 700 360 720"/>
+
+  <!-- Hill / tomb mound -->
+  <path d="M 120 700 Q 300 380 480 700"/>
+
+  <!-- Tomb opening (rounded arch) -->
+  <path d="M 230 700 L 230 540 Q 230 480 300 480 Q 370 480 370 540 L 370 700"/>
+
+  <!-- Rolled-away stone -->
+  <ellipse cx="420" cy="640" rx="80" ry="60"/>
+  <path d="M 360 640 Q 380 600 420 600"/>
+  <path d="M 380 660 Q 420 670 460 660"/>
+
+  <!-- Light rays from tomb -->
+  <line x1="300" y1="540" x2="300" y2="440"/>
+  <line x1="260" y1="560" x2="200" y2="500"/>
+  <line x1="340" y1="560" x2="400" y2="500"/>
+  <line x1="280" y1="540" x2="240" y2="460"/>
+  <line x1="320" y1="540" x2="360" y2="460"/>
+
+  <!-- Sun/glory circle behind hill -->
+  <circle cx="300" cy="280" r="60"/>
+  <line x1="300" y1="180" x2="300" y2="200"/>
+  <line x1="300" y1="340" x2="300" y2="360"/>
+  <line x1="200" y1="280" x2="220" y2="280"/>
+  <line x1="380" y1="280" x2="400" y2="280"/>
+  <line x1="230" y1="210" x2="245" y2="225"/>
+  <line x1="355" y1="335" x2="370" y2="350"/>
+  <line x1="230" y1="350" x2="245" y2="335"/>
+  <line x1="355" y1="225" x2="370" y2="210"/>
+
+  <!-- Cross silhouette top right -->
+  <line x1="500" y1="140" x2="500" y2="240"/>
+  <line x1="470" y1="170" x2="530" y2="170"/>
+
+  <!-- Small flowers in the foreground -->
+  <circle cx="100" cy="730" r="6"/>
+  <circle cx="115" cy="745" r="6"/>
+  <circle cx="130" cy="730" r="6"/>
+  <line x1="115" y1="750" x2="115" y2="780"/>
+
+  <circle cx="500" cy="730" r="6"/>
+  <circle cx="515" cy="745" r="6"/>
+  <circle cx="530" cy="730" r="6"/>
+  <line x1="515" y1="750" x2="515" y2="780"/>
+
+  <!-- Footer -->
+  <text x="300" y="780" text-anchor="middle" font-family="Georgia, serif" font-size="12" stroke="none" fill="#666">littleseed.app — Free to print &amp; share</text>
+</svg>

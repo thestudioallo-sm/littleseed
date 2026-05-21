@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import type { SearchResult } from '@/lib/types';
 import { AGE_GROUP_LABELS, DIFFICULTY_LABELS } from '@/lib/types';
 
@@ -14,6 +13,11 @@ export function SheetCard({ sheet }: SheetCardProps) {
   } = sheet;
 
   const displayTitle = title ?? bible_story;
+  // Prefer the thumbnail, but fall back to the full SVG (good enough for a preview).
+  // We use a plain <img> tag because Next.js' Image component refuses to render
+  // SVG sources unless `dangerouslyAllowSVG` is set — and SVGs don't need
+  // next/image optimisation anyway (they're already resolution-independent).
+  const previewSrc = thumbnail_url ?? svg_url ?? null;
 
   return (
     <article className="border border-gray-200 rounded-lg overflow-hidden bg-white hover:border-blue-400 transition-colors">
@@ -24,14 +28,13 @@ export function SheetCard({ sheet }: SheetCardProps) {
       >
         {/* Thumbnail */}
         <div className="relative bg-gray-50 aspect-[3/4] overflow-hidden">
-          {thumbnail_url ? (
-            <Image
-              src={thumbnail_url}
+          {previewSrc ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={previewSrc}
               alt={`Preview of ${displayTitle}`}
-              fill
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className="object-contain p-3"
               loading="lazy"
+              className="absolute inset-0 w-full h-full object-contain p-3"
             />
           ) : (
             /* Fallback: inline SVG preview hint */
