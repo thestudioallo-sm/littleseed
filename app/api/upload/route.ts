@@ -77,6 +77,40 @@ export async function POST(req: NextRequest) {
   const { getSupabaseAdmin } = await import('@/lib/supabase');
   const supa = getSupabaseAdmin();
 
+  // ── Auto-heal: make sure the "coloring" bucket exists (public) ──
+  // This is idempotent — listBuckets + createBucket only fire when missing.
+  try {
+    const { data: buckets, error: listErr } = await supa.storage.listBuckets();
+    if (listErr) {
+      return NextResponse.json({
+        error: 'Could not list storage buckets',
+        detail: listErr.message,
+        hint: 'Check that the SUPABASE_SERVICE_ROLE_KEY env var is correct on the server.',
+      }, { status: 500 });
+    }
+    const exists = (buckets ?? []).some((b) => b.name === 'coloring');
+    if (!exists) {
+      const { error: createErr } = await supa.storage.createBucket('coloring', {
+        public: true,
+        fileSizeLimit: 5 * 1024 * 1024,
+        allowedMimeTypes: ['image/svg+xml', 'image/png', 'image/jpeg', 'image/webp'],
+      });
+      if (createErr) {
+        return NextResponse.json({
+          error: 'Could not auto-create "coloring" bucket',
+          detail: createErr.message,
+          hint:
+            'Open Supabase dashboard → Storage → New bucket → name "coloring" (public).',
+        }, { status: 500 });
+      }
+    }
+  } catch (e: any) {
+    return NextResponse.json({
+      error: 'Storage init failed',
+      detail: e?.message ?? String(e),
+    }, { status: 500 });
+  }
+
   const path = `user-uploads/${slug}.svg`;
   const { error: upErr } = await supa
     .storage.from('coloring')
@@ -85,7 +119,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       error: 'Storage upload failed',
       detail: upErr.message,
-      hint: 'Check that the "coloring" bucket exists and that the service_role key is correct.',
+      hint: 'Bucket exists but upload was rejected. Check service_role key + bucket policies.',
     }, { status: 500 });
   }
 
