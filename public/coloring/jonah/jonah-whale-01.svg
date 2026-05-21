@@ -4,59 +4,126 @@
   Free Bible Coloring Sheet | littleseed.app
   Bible reference: Jonah 1:17
 -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-  <rect width="600" height="800" fill="#fff"/>
-
-  <!-- Title -->
-  <text x="300" y="60" text-anchor="middle" font-family="Georgia, serif" font-size="32" font-weight="bold" stroke="none" fill="#000">Jonah and the Big Fish</text>
-  <text x="300" y="92" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-style="italic" stroke="none" fill="#333">"The LORD provided a huge fish to swallow Jonah." — Jonah 1:17</text>
-
-  <!-- Wavy ocean lines -->
-  <path d="M 40 200 Q 100 180 160 200 T 280 200 T 400 200 T 520 200 T 580 200"/>
-  <path d="M 40 240 Q 100 220 160 240 T 280 240 T 400 240 T 520 240 T 580 240"/>
-  <path d="M 40 720 Q 100 700 160 720 T 280 720 T 400 720 T 520 720 T 580 720"/>
-  <path d="M 40 750 Q 100 730 160 750 T 280 750 T 400 750 T 520 750 T 580 750"/>
-
-  <!-- Whale body -->
-  <path d="M 100 480
-           Q 80 380 200 360
-           Q 350 340 460 380
-           Q 530 405 520 460
-           Q 540 510 470 540
-           Q 350 580 200 560
-           Q 80 540 100 480 Z"/>
-
-  <!-- Tail -->
-  <path d="M 100 480 L 50 420 L 60 480 L 50 540 L 100 500"/>
-
-  <!-- Eye -->
-  <circle cx="430" cy="430" r="12"/>
-  <circle cx="432" cy="428" r="4" fill="#000"/>
-
-  <!-- Mouth/smile -->
-  <path d="M 410 470 Q 450 490 490 470"/>
-
-  <!-- Belly line -->
-  <path d="M 130 510 Q 280 560 460 510"/>
-
-  <!-- Water spout -->
-  <path d="M 300 360 Q 290 320 280 290"/>
-  <path d="M 300 360 Q 300 320 300 280"/>
-  <path d="M 300 360 Q 310 320 320 290"/>
-  <circle cx="280" cy="280" r="6"/>
-  <circle cx="300" cy="270" r="7"/>
-  <circle cx="320" cy="280" r="6"/>
-
-  <!-- Fin -->
-  <path d="M 250 560 Q 240 620 280 640 Q 310 620 290 560"/>
-
-  <!-- Small fish friends -->
-  <path d="M 480 660 Q 510 650 530 660 Q 510 670 480 660 L 470 650 L 470 670 Z"/>
-  <circle cx="510" cy="660" r="2" fill="#000"/>
-
-  <path d="M 80 650 Q 110 640 130 650 Q 110 660 80 650 L 70 640 L 70 660 Z"/>
-  <circle cx="110" cy="650" r="2" fill="#000"/>
-
-  <!-- Footer -->
-  <text x="300" y="780" text-anchor="middle" font-family="Georgia, serif" font-size="12" stroke="none" fill="#666">littleseed.app — Free to print &amp; share</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842"
+     aria-label="Jonah and the Big Fish coloring sheet" role="img"
+     fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="595" height="842" fill="#fff" stroke="none"/>
+  <g stroke-width="3">
+    <circle cx="510" cy="105" r="38"/>
+    <circle cx="498" cy="98" r="3" fill="#000" stroke="none"/>
+    <circle cx="522" cy="98" r="3" fill="#000" stroke="none"/>
+    <path d="M 495 115 Q 510 125 525 115"/>
+    <line x1="510" y1="55" x2="510" y2="42"/>
+    <line x1="510" y1="155" x2="510" y2="168"/>
+    <line x1="460" y1="105" x2="447" y2="105"/>
+    <line x1="560" y1="105" x2="573" y2="105"/>
+    <line x1="473" y1="68" x2="463" y2="58"/>
+    <line x1="547" y1="142" x2="557" y2="152"/>
+    <line x1="473" y1="142" x2="463" y2="152"/>
+    <line x1="547" y1="68" x2="557" y2="58"/>
+  </g>
+  <g stroke-width="2.5">
+    <path d="M 60 100 Q 50 80 75 78 Q 80 60 105 65 Q 125 55 140 75 Q 165 73 158 100 Q 140 115 105 110 Q 80 118 60 100 Z"/>
+    <path d="M 250 80 Q 245 65 263 64 Q 270 50 290 55 Q 305 48 318 65 Q 335 65 330 85 Q 315 95 290 92 Q 270 98 250 80 Z"/>
+    <path d="M 380 165 Q 373 152 388 150 Q 393 138 408 142 Q 420 138 428 152 Q 442 153 437 168 Q 423 175 405 173 Q 392 178 380 165 Z"/>
+  </g>
+  <g stroke-width="2.5">
+    <path d="M 170 175 Q 178 167 185 175 Q 192 167 200 175"/>
+    <path d="M 320 140 Q 326 134 331 140 Q 336 134 342 140"/>
+    <path d="M 65 200 Q 70 195 75 200 Q 80 195 85 200"/>
+  </g>
+  <g stroke-width="2.5">
+    <path d="M 0 470 Q 60 450 120 470 Q 180 490 240 470 Q 300 450 360 470 Q 420 490 480 470 Q 540 450 595 470"/>
+    <path d="M 0 495 Q 70 478 140 495 Q 210 512 280 495 Q 350 478 420 495 Q 490 512 595 495"/>
+  </g>
+  <g stroke-width="3.5">
+    <path d="M 145 530 Q 80 480 90 410 Q 100 350 180 330 Q 280 305 380 330 Q 470 350 480 420 Q 488 470 460 510 Q 480 525 470 540 Q 450 555 440 545 Q 430 555 415 550 Q 380 575 280 575 Q 200 575 145 530 Z"/>
+    <path d="M 105 470 Q 130 490 165 488 Q 200 485 230 478"/>
+    <path d="M 130 485 Q 160 500 200 495"/>
+    <path d="M 145 530 Q 160 545 175 530" stroke-width="2.5"/>
+    <path d="M 175 540 Q 195 555 215 540" stroke-width="2.5"/>
+    <path d="M 215 545 Q 240 558 265 545" stroke-width="2.5"/>
+    <path d="M 265 547 Q 295 558 325 547" stroke-width="2.5"/>
+    <path d="M 325 545 Q 355 555 380 545" stroke-width="2.5"/>
+    <path d="M 380 540 Q 400 550 415 540" stroke-width="2.5"/>
+  </g>
+  <g stroke-width="3">
+    <circle cx="180" cy="395" r="14"/>
+    <circle cx="183" cy="392" r="6" fill="#000" stroke="none"/>
+    <circle cx="180" cy="389" r="2" fill="#fff" stroke="none"/>
+    <path d="M 165 376 Q 180 370 195 376"/>
+    <circle cx="155" cy="430" r="6"/>
+  </g>
+  <g stroke-width="3">
+    <path d="M 305 555 Q 320 600 285 620 Q 250 605 270 555 Z"/>
+    <path d="M 285 580 L 290 605" stroke-width="2"/>
+  </g>
+  <g stroke-width="3">
+    <path d="M 478 425 Q 525 395 555 405 Q 540 425 530 440 Q 555 450 560 475 Q 530 475 510 460 Q 500 480 488 480"/>
+    <path d="M 510 415 L 525 425" stroke-width="2"/>
+    <path d="M 510 455 L 525 450" stroke-width="2"/>
+  </g>
+  <g stroke-width="3">
+    <ellipse cx="265" cy="335" rx="10" ry="4"/>
+    <path d="M 260 330 Q 245 280 250 240"/>
+    <path d="M 265 330 Q 265 285 268 240"/>
+    <path d="M 270 330 Q 285 280 290 245"/>
+    <ellipse cx="248" cy="230" rx="6" ry="9"/>
+    <ellipse cx="270" cy="220" rx="7" ry="10"/>
+    <ellipse cx="292" cy="232" rx="6" ry="9"/>
+    <circle cx="232" cy="265" r="4"/>
+    <circle cx="305" cy="265" r="4"/>
+  </g>
+  <g stroke-width="2.5">
+    <path d="M 360 250 Q 355 220 390 218 Q 425 215 445 235 Q 470 235 470 260 Q 470 285 440 285 Q 410 290 390 280 Q 365 285 360 270 Q 355 260 360 250 Z"/>
+    <circle cx="365" cy="295" r="5"/>
+    <circle cx="355" cy="310" r="3"/>
+    <g transform="translate(412,250)" stroke-width="2">
+      <circle cx="0" cy="-12" r="9"/>
+      <path d="M -4 -13 Q -2 -15 0 -13"/>
+      <path d="M 0 -13 Q 2 -15 4 -13"/>
+      <path d="M -7 -8 Q 0 -2 7 -8"/>
+      <path d="M -10 -3 L -14 18 L 14 18 L 10 -3 Z"/>
+      <path d="M -5 5 Q 0 -2 5 5 Q 0 12 -5 5 Z"/>
+    </g>
+  </g>
+  <g stroke-width="2">
+    <circle cx="90" cy="630" r="6"/>
+    <circle cx="105" cy="650" r="4"/>
+    <circle cx="115" cy="670" r="3"/>
+    <circle cx="510" cy="630" r="6"/>
+    <circle cx="525" cy="650" r="4"/>
+    <circle cx="535" cy="668" r="3"/>
+  </g>
+  <g stroke-width="2.5">
+    <g transform="translate(70,680)">
+      <path d="M 0 0 Q 15 -10 30 0 Q 15 10 0 0 Z"/>
+      <path d="M 0 0 L -10 -8 L -10 8 Z"/>
+      <circle cx="20" cy="-3" r="2" fill="#000" stroke="none"/>
+      <path d="M 8 0 Q 12 -4 18 0" stroke-width="1.5"/>
+    </g>
+    <g transform="translate(485,690) scale(-1,1)">
+      <path d="M 0 0 Q 20 -12 40 0 Q 20 12 0 0 Z"/>
+      <path d="M 0 0 L -12 -10 L -12 10 Z"/>
+      <circle cx="27" cy="-3" r="2.5" fill="#000" stroke="none"/>
+      <path d="M 10 0 Q 16 -5 22 0" stroke-width="1.5"/>
+      <path d="M 10 4 Q 18 6 25 4" stroke-width="1.5"/>
+    </g>
+    <g transform="translate(280,720)">
+      <path d="M 0 0 Q 12 -8 24 0 Q 12 8 0 0 Z"/>
+      <path d="M 0 0 L -8 -6 L -8 6 Z"/>
+      <circle cx="16" cy="-2" r="1.8" fill="#000" stroke="none"/>
+    </g>
+  </g>
+  <g stroke-width="2">
+    <path d="M 30 740 Q 60 730 90 740 Q 120 750 150 740"/>
+    <path d="M 180 760 Q 220 752 260 760 Q 300 768 340 760"/>
+    <path d="M 380 740 Q 420 730 460 740 Q 510 750 555 740"/>
+  </g>
+  <g stroke-width="3">
+    <path d="M 80 790 L 60 780 L 80 770 L 80 778 L 515 778 L 515 770 L 535 780 L 515 790 L 515 782 L 80 782 Z"/>
+    <rect x="105" y="772" width="385" height="36" rx="6"/>
+    <text x="297" y="800" font-family="Georgia, serif" font-size="22" font-weight="bold" text-anchor="middle" fill="none" stroke="#000" stroke-width="1.2">JONAH AND THE BIG FISH</text>
+  </g>
+  <text x="297" y="832" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#666" stroke="none">"The LORD provided a huge fish to swallow Jonah." - Jonah 1:17 · littleseed.app</text>
 </svg>
