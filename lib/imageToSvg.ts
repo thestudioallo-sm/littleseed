@@ -139,6 +139,11 @@ function thresholdMask(grey: Uint8ClampedArray, w: number, h: number, t: number)
 function maskToPath(mask: Uint8Array, w: number, h: number, scaleX: number, scaleY: number, offsetX: number, offsetY: number) {
   let d = '';
   let runs = 0;
+  // Render each horizontal run as a filled 1-row-tall rectangle:
+  //   M x y h len v rowH h -len z
+  // (an open `M x y h len` has zero area when filled, so the path
+  // is invisible — we close it into a thin rect instead.)
+  const rowH = scaleY.toFixed(2);
   for (let y = 0; y < h; y++) {
     let x = 0;
     while (x < w) {
@@ -149,7 +154,7 @@ function maskToPath(mask: Uint8Array, w: number, h: number, scaleX: number, scal
         const px = (runStart * scaleX + offsetX).toFixed(2);
         const py = (y * scaleY + offsetY).toFixed(2);
         const len = ((runEnd - runStart) * scaleX).toFixed(2);
-        d += `M${px} ${py}h${len}`;
+        d += `M${px} ${py}h${len}v${rowH}h-${len}z`;
         runs++;
       } else {
         x++;
