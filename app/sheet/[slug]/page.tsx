@@ -78,21 +78,14 @@ export default async function SheetPage({ params, searchParams }: SheetPageProps
               className="border border-gray-200 rounded-xl bg-gray-50 overflow-hidden print-page"
               style={{ aspectRatio: '3/4' }}
             >
-              {/* Direct SVG embed — zero extra HTTP request */}
-              <object
-                data={sheet.svg_url}
-                type="image/svg+xml"
-                className="w-full h-full"
-                aria-label={`Coloring sheet: ${title}`}
-              >
-                {/* Fallback if object not supported */}
-                <img
-                  src={sheet.svg_url}
-                  alt={`Coloring sheet: ${title}`}
-                  className="w-full h-full object-contain"
-                  loading="eager"
-                />
-              </object>
+              {/* Image embed — works for both SVG and raster (PNG/JPG/WebP) */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={sheet.svg_url}
+                alt={`Coloring sheet: ${title}`}
+                className="w-full h-full object-contain"
+                loading="eager"
+              />
             </div>
 
             {/* Verse under SVG (visible on screen) */}
@@ -196,14 +189,16 @@ export default async function SheetPage({ params, searchParams }: SheetPageProps
               </div>
             )}
 
-            {/* SVG download */}
+            {/* Image download (label adapts to file type) */}
             <div className="border-t border-gray-100 pt-3">
               <a
                 href={sheet.svg_url}
                 download
                 className="text-xs text-gray-400 hover:text-gray-600 underline"
               >
-                Download SVG (vector)
+                {sheet.svg_url.toLowerCase().endsWith('.svg')
+                  ? 'Download SVG (vector)'
+                  : 'Download image'}
               </a>
             </div>
           </aside>
