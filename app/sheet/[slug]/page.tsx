@@ -13,8 +13,9 @@ interface SheetPageProps {
   searchParams: { lang?: string };
 }
 
-// Static generation: revalidate once per day
-export const revalidate = 86400;
+// Static generation with short ISR: revalidate every 60s so DB updates
+// (e.g. svg_url / pdf_url changes) propagate quickly to the static page.
+export const revalidate = 60;
 
 export async function generateMetadata({
   params, searchParams,
