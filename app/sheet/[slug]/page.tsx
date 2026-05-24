@@ -59,24 +59,27 @@ export default async function SheetPage({ params, searchParams }: SheetPageProps
         <p className="text-xs text-gray-400 mt-1">littleseed.app</p>
       </div>
 
-      {/* ── Screen layout ── */}
-      <div className="no-print max-w-4xl mx-auto px-4 py-6">
-
-        {/* Back link */}
+      {/* ── Back link (screen only) ── */}
+      <div className="no-print max-w-4xl mx-auto px-4 pt-6">
         <Link
           href="/search"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 mb-4"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800"
           style={{ minHeight: 40 }}
         >
           ← Back to search
         </Link>
+      </div>
 
-        <div className="grid md:grid-cols-[1fr_300px] gap-6">
+      {/* ── Main layout — kept printable; only sidebar / verse marked no-print ── */}
+      <div className="max-w-4xl mx-auto px-4 py-4 print:p-0 print:max-w-none">
 
-          {/* ── SVG Preview ── */}
+        <div className="grid md:grid-cols-[1fr_300px] gap-6 print:block print:gap-0">
+
+          {/* ── Image area (prints) ── */}
           <div>
             <div
-              className="border border-gray-200 rounded-xl bg-gray-50 overflow-hidden print-page"
+              className="border border-gray-200 rounded-xl bg-gray-50 overflow-hidden print-page
+                         print:border-0 print:rounded-none print:bg-white"
               style={{ aspectRatio: '3/4' }}
             >
               {/* Image embed — works for both SVG and raster (PNG/JPG/WebP) */}
@@ -89,10 +92,10 @@ export default async function SheetPage({ params, searchParams }: SheetPageProps
               />
             </div>
 
-            {/* Verse under SVG (visible on screen) */}
+            {/* Verse under image (screen only) */}
             {verse && (
               <blockquote
-                className="verse-text mt-4 px-4 py-3 border-l-4 border-blue-400
+                className="verse-text no-print mt-4 px-4 py-3 border-l-4 border-blue-400
                            bg-blue-50 text-sm text-gray-700 rounded-r-lg italic leading-relaxed"
               >
                 {verse}
@@ -100,8 +103,8 @@ export default async function SheetPage({ params, searchParams }: SheetPageProps
             )}
           </div>
 
-          {/* ── Sidebar ── */}
-          <aside className="flex flex-col gap-4">
+          {/* ── Sidebar (screen only) ── */}
+          <aside className="no-print flex flex-col gap-4">
 
             {/* Title */}
             <div>

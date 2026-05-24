@@ -39,7 +39,7 @@ html {
    ============================================================ */
 
 @media print {
-  /* ── Hide everything except the coloring sheet ───────────────── */
+  /* ── Hide everything except the coloring image ────────────────── */
   header, nav, footer, .no-print, aside,
   .verse-text {
     display: none !important;
@@ -47,16 +47,18 @@ html {
 
   @page {
     size: A4 portrait;
-    margin: 10mm;
+    margin: 6mm;
   }
 
   html, body {
     margin: 0 !important;
     padding: 0 !important;
     background: #fff !important;
+    width: auto !important;
+    height: auto !important;
   }
 
-  /* Reset any layout containers so the image gets the whole page */
+  /* Reset all layout containers — image gets the whole page */
   main, main > div, .max-w-4xl, .grid {
     display: block !important;
     max-width: 100% !important;
@@ -64,35 +66,54 @@ html {
     padding: 0 !important;
     margin: 0 !important;
     grid-template-columns: none !important;
+    gap: 0 !important;
   }
 
-  /* The coloring image — fill the printable area, keep aspect ratio */
+  /* Print-only title block — compact so it doesn't push image to page 2 */
+  .print\:block {
+    display: block !important;
+    text-align: center;
+    margin: 0 0 3mm 0 !important;
+    page-break-after: avoid;
+  }
+  .print\:block p {
+    margin: 0 !important;
+  }
+  .print\:block p.text-lg {
+    font-size: 12pt !important;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .print\:block p.text-sm,
+  .print\:block p.text-xs {
+    display: none !important;   /* drop verse + brand from print header to save space */
+  }
+
+  /* The coloring image wrapper — fills printable area, no border */
   .print-page {
     width: 100% !important;
     height: auto !important;
     aspect-ratio: auto !important;
     border: none !important;
     background: #fff !important;
+    overflow: visible !important;
     page-break-inside: avoid;
-    page-break-after: auto;
+    page-break-after: avoid;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .print-page img,
   .print-page svg,
   .print-page object {
     display: block !important;
-    width: 100% !important;
+    width: auto !important;
+    max-width: 100% !important;
     height: auto !important;
-    max-height: 92vh;
+    max-height: calc(297mm - 18mm) !important;   /* A4 height minus margins + header */
     object-fit: contain !important;
-    margin: 0 auto;
-  }
-
-  /* Print-only title block (rendered hidden on screen, visible on print) */
-  .print\:block {
-    display: block !important;
-    text-align: center;
-    margin-bottom: 4mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
   }
 }
 
