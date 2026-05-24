@@ -39,31 +39,60 @@ html {
    ============================================================ */
 
 @media print {
-  /* Hide everything except the coloring sheet */
-  header, nav, footer, .no-print {
+  /* ── Hide everything except the coloring sheet ───────────────── */
+  header, nav, footer, .no-print, aside,
+  .verse-text {
     display: none !important;
   }
 
-  body {
-    margin: 0;
-    padding: 0;
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
   }
 
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  /* Reset any layout containers so the image gets the whole page */
+  main, main > div, .max-w-4xl, .grid {
+    display: block !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    grid-template-columns: none !important;
+  }
+
+  /* The coloring image — fill the printable area, keep aspect ratio */
   .print-page {
-    width: 100%;
-    page-break-after: always;
-  }
-
-  svg {
     width: 100% !important;
     height: auto !important;
+    aspect-ratio: auto !important;
+    border: none !important;
+    background: #fff !important;
+    page-break-inside: avoid;
+    page-break-after: auto;
   }
 
-  /* Verse text prints nicely */
-  .verse-text {
-    font-size: 11pt;
-    line-height: 1.6;
-    margin-top: 6mm;
+  .print-page img,
+  .print-page svg,
+  .print-page object {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 92vh;
+    object-fit: contain !important;
+    margin: 0 auto;
+  }
+
+  /* Print-only title block (rendered hidden on screen, visible on print) */
+  .print\:block {
+    display: block !important;
+    text-align: center;
+    margin-bottom: 4mm !important;
   }
 }
 

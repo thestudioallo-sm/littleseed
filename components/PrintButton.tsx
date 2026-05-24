@@ -4,15 +4,16 @@ interface PrintButtonProps {
   label?: string;
 }
 
-export function PrintButton({ label = 'Print' }: PrintButtonProps) {
+export function PrintButton({ label = 'Print or Save as PDF' }: PrintButtonProps) {
   return (
     <button
       type="button"
       onClick={() => window.print()}
-      className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg
-                 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50
-                 active:bg-gray-100"
-      style={{ minHeight: 44 }}
+      className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg
+                 bg-blue-600 text-white font-semibold text-sm
+                 hover:bg-blue-700 active:bg-blue-800"
+      style={{ minHeight: 52 }}
+      title="Opens your browser's print dialog. Choose 'Save as PDF' to download as PDF, or send to a printer."
     >
       {/* Printer icon — inline SVG, no library */}
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"

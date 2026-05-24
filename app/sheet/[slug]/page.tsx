@@ -164,8 +164,8 @@ export default async function SheetPage({ params, searchParams }: SheetPageProps
                 </a>
               )}
 
-              {/* Print */}
-              <PrintButton label="Print Coloring Sheet" />
+              {/* Print or Save as PDF (via browser print dialog) */}
+              <PrintButton label="Print or Save as PDF" />
             </div>
 
             {/* Tags */}
